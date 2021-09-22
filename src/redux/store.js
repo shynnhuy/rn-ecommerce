@@ -4,11 +4,14 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 import createSagaMiddleware from "redux-saga";
+import debug from "redux-flipper";
+
 import {rootReducer} from "./reducer";
 import {rootSaga} from "./saga";
 
 const sagaMiddleware = createSagaMiddleware();
-const middleware = [sagaMiddleware];
+const createDebugger = debug();
+const middleware = [sagaMiddleware, createDebugger];
 
 const persistConfig = {
   key: "root",

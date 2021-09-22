@@ -1,9 +1,23 @@
 import React from "react";
 import {StyleSheet, TextInput} from "react-native";
 
-export const Input = ({style}) => {
+export const Input = ({
+  style,
+  value,
+  onChangeText,
+  placeholder,
+  secure = false,
+  type = "default",
+}) => {
   return (
-    <TextInput placeholder="Email address" style={[styles.input, style]} />
+    <TextInput
+      placeholder={placeholder}
+      style={[styles.input, style]}
+      value={value}
+      onChangeText={onChangeText}
+      secureTextEntry={secure}
+      keyboardType={type}
+    />
   );
 };
 

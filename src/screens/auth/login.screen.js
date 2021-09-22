@@ -1,29 +1,22 @@
 import React from "react";
 
-import {StyleSheet, Text, View} from "react-native";
-import {Input} from "./components/Input";
+import {StyleSheet} from "react-native";
+import {useDispatch, useSelector} from "react-redux";
+import {Loading} from "../../components";
+import {actionLogin} from "../../redux/auth";
+import {AuthForm} from "./components/AuthForm";
 
 export const LoginScreen = () => {
+  const loading = useSelector(state => state.auth.loading);
+  const dispatch = useDispatch();
+  const login = data => dispatch(actionLogin(data));
+
   return (
-    <View style={styles.container}>
-      <Input style={styles.email} />
-      <Input style={styles.passwd} />
-    </View>
+    <>
+      <AuthForm buttonText="Login" onSubmit={login} />
+      {loading && <Loading />}
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-  },
-  email: {
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
-  passwd: {
-    borderTopWidth: 0,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-  },
-});
+const styles = StyleSheet.create({});

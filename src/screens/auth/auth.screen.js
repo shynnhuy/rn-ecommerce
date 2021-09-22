@@ -1,25 +1,12 @@
 import React from "react";
-import {View, Text, StyleSheet, Pressable} from "react-native";
+import {View, Text, StyleSheet} from "react-native";
+import {Button} from "../../components";
 
 const ViewItem = ({text, btnText, style, primary, action}) => {
   return (
     <View style={[styles.container, style]}>
       <Text style={styles.text}>{text}</Text>
-      <Pressable
-        onPress={action}
-        style={({pressed}) => [
-          styles.button,
-          primary ? styles.buttonPrimary : styles.buttonSecondary,
-          {
-            borderWidth: pressed ? (primary ? 0 : 1) : 1,
-            borderBottomWidth: pressed ? (primary ? 0 : 1) : 3,
-            marginTop: pressed ? 34 : 30,
-          },
-        ]}>
-        <Text style={primary ? styles.btnTextPrimary : styles.btnText}>
-          {btnText}
-        </Text>
-      </Pressable>
+      <Button buttonText={btnText} onPress={action} primary={primary} />
     </View>
   );
 };
