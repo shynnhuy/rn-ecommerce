@@ -1,10 +1,37 @@
 import React from "react";
-import {TouchableOpacity, StyleSheet, Text, View, Image} from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 
 import Img from "../../assets/splash.png";
 import {useSelector} from "react-redux";
+
+const UserBox = ({user, onPress}) => (
+  <Pressable
+    style={({pressed}) => [
+      styles.infoContainer,
+      {
+        borderBottomWidth: pressed ? 1 : 3,
+        marginTop: pressed ? 19 : 15,
+      },
+    ]}
+    onPress={onPress}>
+    <Image source={Img} style={styles.avatar} />
+    <View style={styles.info}>
+      <Text style={styles.email}>{user.email}</Text>
+      <Text style={styles.date}>
+        Joined {moment(user.createdAt).format("MMMM YYYY")}
+      </Text>
+    </View>
+  </Pressable>
+);
 
 export const AccountScreen = ({navigation: {navigate}}) => {
   const auth = useSelector(state => state.auth);
@@ -14,22 +41,19 @@ export const AccountScreen = ({navigation: {navigate}}) => {
       <View style={styles.iconContainer}>
         <TouchableOpacity
           style={styles.headerBtn}
+          onPress={() => console.log("Cart")}>
+          <Ionicons name="cart-outline" size={28} color="gray" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.headerBtn}
           onPress={() => navigate("Setting")}>
           <Ionicons name="cog-outline" size={28} color="gray" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Cart")}>
-          <Ionicons name="cart-outline" size={28} color="gray" />
-        </TouchableOpacity>
       </View>
-      <View style={styles.infoContainer}>
-        <Image source={Img} style={styles.avatar} />
-        <View style={styles.info}>
-          <Text style={styles.email}>{auth.user?.email}</Text>
-          <Text style={styles.date}>
-            Joined {moment(auth.user?.createdAt).format("MMMM YYYY")}
-          </Text>
-        </View>
-      </View>
+
+      {auth.user && (
+        <UserBox user={auth.user} onPress={() => navigate("Profile")} />
+      )}
     </View>
   );
 };
@@ -48,16 +72,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     paddingVertical: 10,
-    paddingHorizontal: 15,
     borderBottomColor: "gray",
     borderBottomWidth: 0.5,
   },
   headerBtn: {
-    marginHorizontal: 5,
+    marginLeft: 15,
   },
   infoContainer: {
     flexDirection: "row",
     marginTop: 15,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: "#fff",
     borderColor: "#d4d4d4",

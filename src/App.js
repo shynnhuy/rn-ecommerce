@@ -6,9 +6,10 @@ import {Provider} from "./Provider";
 import RootNavigator from "./navigators/root.navigator";
 
 export const App = () => {
+  
   useLayoutEffect(() => {
     RNBootSplash.hide();
-  });
+  }, []);
 
   return (
     <Provider>

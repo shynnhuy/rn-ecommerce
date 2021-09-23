@@ -5,3 +5,5 @@ export const apiRegister = ({email, password}) =>
 
 export const apiLogin = ({email, password}) =>
   api.post("/auth/login", {email, password});
+
+export const apiUpdateInfo = data => api.patch("/auth", data);

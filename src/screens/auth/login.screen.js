@@ -7,14 +7,14 @@ import {actionLogin} from "../../redux/auth";
 import {AuthForm} from "./components/AuthForm";
 
 export const LoginScreen = () => {
-  const loading = useSelector(state => state.auth.loading);
+  const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const login = data => dispatch(actionLogin(data));
 
   return (
     <>
-      <AuthForm buttonText="Login" onSubmit={login} />
-      {loading && <Loading />}
+      <AuthForm buttonText="Login" onSubmit={login} error={auth.error} />
+      {auth.loading && <Loading />}
     </>
   );
 };

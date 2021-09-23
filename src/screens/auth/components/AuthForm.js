@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from "react-native";
 import {Button} from "../../../components";
 import {Input} from "./Input";
 
-export const AuthForm = ({buttonText, onSubmit, primary = false}) => {
+export const AuthForm = ({buttonText, onSubmit, primary = false, error}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,6 +28,7 @@ export const AuthForm = ({buttonText, onSubmit, primary = false}) => {
         onPress={() => onSubmit({email, password})}
         primary={primary}
       />
+      {Boolean(error) && <Text style={styles.errorMsg}>{error}</Text>}
     </View>
   );
 };
@@ -45,5 +46,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
+  },
+  errorMsg: {
+    fontSize: 20,
+    color: "#ff0000",
+    alignSelf: "center",
   },
 });

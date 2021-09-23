@@ -1,6 +1,8 @@
 import React from "react";
 import {View, Text, StyleSheet} from "react-native";
+import {useDispatch} from "react-redux";
 import {Button} from "../../components";
+import {clearError} from "../../redux/auth";
 
 const ViewItem = ({text, btnText, style, primary, action}) => {
   return (
@@ -15,8 +17,12 @@ const Divider = () => {
 };
 
 export const AuthScreen = ({navigation: {navigate}}) => {
-  const login = () => navigate("Login");
-  const register = () => navigate("Register");
+  const dispatch = useDispatch();
+
+  const navigateTo = path => {
+    dispatch(clearError());
+    navigate(path);
+  };
 
   return (
     <View style={[styles.container, {justifyContent: "center"}]}>
@@ -24,14 +30,14 @@ export const AuthScreen = ({navigation: {navigate}}) => {
         text="Already have an account?"
         btnText="Login"
         style={{justifyContent: "flex-end"}}
-        action={login}
+        action={() => navigateTo("Login")}
         primary
       />
       <Divider />
       <ViewItem
         text="Don't have an account?"
         btnText="Register"
-        action={register}
+        action={() => navigateTo("Register")}
       />
     </View>
   );
@@ -54,28 +60,5 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginTop: 30,
     color: "#414141",
-  },
-  button: {
-    marginHorizontal: 10,
-    marginVertical: 30,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderBottomWidth: 3,
-  },
-  buttonPrimary: {
-    backgroundColor: "#36c338",
-    borderColor: "#239925",
-  },
-  buttonSecondary: {
-    borderColor: "#d4d4d4",
-  },
-  btnText: {
-    alignSelf: "center",
-    color: "#36c338",
-  },
-  btnTextPrimary: {
-    alignSelf: "center",
-    color: "#fff",
   },
 });

@@ -1,7 +1,17 @@
-import {LOGIN, LOGOUT, REGISTER, SEND_REQUEST} from "./auth.constants";
+import {
+  CLEAR_ERROR,
+  LOGIN,
+  LOGOUT,
+  REGISTER,
+  SEND_REQUEST,
+  UPDATE_INFO,
+} from "./auth.constants";
 
 export const sendRequest = () => ({
   type: SEND_REQUEST,
+});
+export const clearError = () => ({
+  type: CLEAR_ERROR,
 });
 
 export const actionLogin = ({email, password}) => ({
@@ -38,5 +48,18 @@ export const actionLogoutSuccess = () => ({
 });
 export const actionLogoutError = error => ({
   type: LOGOUT.ERROR,
+  error,
+});
+
+export const actionUpdateInfo = payload => ({
+  type: UPDATE_INFO.PENDING,
+  payload,
+});
+export const actionUpdateInfoSuccess = payload => ({
+  type: UPDATE_INFO.SUCCESS,
+  payload,
+});
+export const actionUpdateInfoError = error => ({
+  type: UPDATE_INFO.ERROR,
   error,
 });
