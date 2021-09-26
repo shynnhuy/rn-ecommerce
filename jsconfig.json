@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~app/*": ["./src/*"],
+      "~redux/*": ["./src/redux/*"],
+      "~navigators/*": ["./src/navigators/*"],
+      "~screens/*": ["./src/screens/*"],
+      "~utils/*": ["./src/utils/*"]
+    }
+  }
+}
