@@ -87,15 +87,13 @@ function* uploadAvatar({ payload }) {
 
 function* loginFlow() {
   while (true) {
-    const token = yield call(getAccessToken);
-    console.log(token);
-    if (!Boolean(token)) {
-      console.log("YIELD")
-      const { payload } = yield take(LOGIN.PENDING);
-      yield call(login, payload);
-    } else {
-      yield call(logout);
-    }
+    // const token = yield call(getAccessToken);
+    // if (!Boolean(token)) {
+    const { payload } = yield take(LOGIN.PENDING);
+    yield call(login, payload);
+    // } else {
+    //   yield call(logout);
+    // }
   }
 }
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Loading } from "../../components";
-import { actionFetchProducts } from "../../redux/shop";
+import { Loading } from "~app/components";
+import { actionFetchProducts, actionAddToCart } from "~redux/shop";
 import { Product } from "./components/Product";
 
 export const HomeScreen = () => {
@@ -13,7 +13,9 @@ export const HomeScreen = () => {
     dispatch(actionFetchProducts());
   }, []);
 
-  const renderItem = ({ item }) => <Product {...item} />;
+  const renderItem = ({ item }) => (
+    <Product {...item} addToCart={() => dispatch(actionAddToCart(item))} />
+  );
 
   if (shop.loading) {
     return <Loading />;

@@ -1,4 +1,11 @@
-import { ADD_TO_CART, FETCH_PRODUCTS, SEND_REQUEST } from "./shop.constants";
+import {
+  ADD_TO_CART,
+  EMPTY_CART,
+  FETCH_PRODUCTS,
+  REMOVE_FROM_CART,
+  SEND_REQUEST,
+} from "./shop.constants";
+import { addToCart, removeFromCart } from "./shop.utils";
 
 const initialState = {
   loading: false,
@@ -17,10 +24,26 @@ export const shopReducer = (state = initialState, { type, payload, error }) => {
     case FETCH_PRODUCTS.ERROR:
       return { ...state, error };
 
-    case ADD_TO_CART:
-      return { ...state, cart: [...state.cart, payload] };
+    case ADD_TO_CART: {
+      const newCart = addToCart(state.cart, payload);
+      return { ...state, cart: newCart };
+    }
+
+    case REMOVE_FROM_CART: {
+      const newCart = removeFromCart(state.cart, payload);
+      return { ...state, cart: newCart };
+    }
+    case EMPTY_CART: {
+      return { ...state, cart: [] };
+    }
 
     default:
       return state;
   }
 };
+
+export const selectCartCount = (state) =>
+  state.shop.cart.reduce((acc, cur) => acc + cur.amount, 0);
+
+export const selectCartTotal = (state) =>
+  state.shop.cart.reduce((acc, cur) => acc + cur.amount * cur.price.new, 0);
