@@ -1,6 +1,16 @@
 import React from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import {
   actionAddToCart,
   actionEmptyCart,
@@ -8,7 +18,7 @@ import {
 } from "~app/redux/shop";
 import { CartEmpty } from "./components/CartEmpty";
 import { CartItem } from "./components/CartItem";
-import Footer from "./components/Footer";
+import { Footer } from "./components/Footer";
 
 export const CartScreen = ({ navigation }) => {
   const shop = useSelector((state) => state.shop);
@@ -20,7 +30,16 @@ export const CartScreen = ({ navigation }) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Button onPress={clearCart} title="Empty Cart" />,
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+          <MaterialCommunityIcons name="menu" size={25} />
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <TouchableOpacity onPress={clearCart}>
+          <MaterialCommunityIcons name="cart-remove" size={20} />
+        </TouchableOpacity>
+      ),
     });
   }, [navigation]);
 

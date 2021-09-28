@@ -1,56 +1,31 @@
+import { useNavigation } from "@react-navigation/core";
 import React from "react";
-import { View, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Button } from "~app/components";
 import { Total } from "./Total";
 
-const Footer = () => {
-  const {
-    containerStyle,
-    buttonContainerStyle,
-    closeButtonStyle,
-    checkoutButtonStyle,
-  } = styles;
+export const Footer = () => {
+  const { containerStyle } = styles;
+  const navigation = useNavigation();
   return (
     <View style={containerStyle}>
       <Total />
-      <View style={buttonContainerStyle}>
-        <View style={checkoutButtonStyle}>
-          <Text style={{ color: "#fff", alignSelf: "center" }}>
-            Go to checkout
-          </Text>
-        </View>
-      </View>
+      <Button
+        buttonText="Go to checkout"
+        primary
+        onPress={() => navigation.navigate("Payment")}
+      />
     </View>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
     paddingRight: 15,
     paddingLeft: 15,
     borderTopWidth: 1,
     borderColor: "#e2e2e2",
+    justifyContent: "space-around",
   },
-  buttonContainerStyle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingTop: 15,
-  },
-  closeButtonStyle: {
-    backgroundColor: "#7f8c8d",
-    padding: 10,
-    paddingRight: 30,
-    paddingLeft: 30,
-    borderRadius: 3,
-  },
-  checkoutButtonStyle: {
-    flex: 1,
-    backgroundColor: "#f39c12",
-    padding: 10,
-    paddingRight: 60,
-    paddingLeft: 60,
-    borderRadius: 3,
-  },
-};
-
-export default Footer;
+});

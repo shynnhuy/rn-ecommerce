@@ -1,13 +1,34 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Loading } from "~app/components";
-import { actionFetchProducts, actionAddToCart } from "~redux/shop";
-import { Product } from "./components/Product";
 
-export const HomeScreen = () => {
+import { Loading } from "~app/components";
+import {
+  actionFetchProducts,
+  actionAddToCart,
+  selectCartCount,
+} from "~redux/shop";
+import { Product } from "./components/Product";
+import { HeaderCart } from "./components/HeaderCart";
+
+export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const shop = useSelector((state) => state.shop);
+  const count = useSelector(selectCartCount);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderCart cartCount={count} navigation={navigation} />
+      ),
+    });
+  }, [navigation, count]);
 
   useEffect(() => {
     dispatch(actionFetchProducts());

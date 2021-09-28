@@ -1,11 +1,11 @@
 import React from "react";
-import {Pressable, StyleSheet, Text} from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
-export const Button = ({buttonText, onPress, primary = false}) => {
+export const Button = ({ buttonText, onPress, primary = false, style }) => {
   return (
     <Pressable
       onPress={onPress}
-      style={({pressed}) => [
+      style={({ pressed }) => [
         styles.button,
         primary ? styles.primary : styles.secondary,
         {
@@ -13,12 +13,15 @@ export const Button = ({buttonText, onPress, primary = false}) => {
           borderBottomWidth: pressed ? (primary ? 0 : 1) : 3,
           marginTop: pressed ? 34 : 30,
         },
-      ]}>
+        style,
+      ]}
+    >
       <Text
         style={[
           styles.text,
           primary ? styles.textPrimary : styles.textSecondary,
-        ]}>
+        ]}
+      >
         {buttonText}
       </Text>
     </Pressable>
