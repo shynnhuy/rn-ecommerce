@@ -1,11 +1,12 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Badge, Button, Icon, IconButton } from "native-base";
-import { View, Text } from "react-native";
+import { Badge, Icon, IconButton } from "native-base";
+import { View } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 
-export const HeaderCart = ({ cartCount = 0, navigation }) => {
+export const HeaderCart = ({ cartCount = 0 }) => {
+  const navigation = useNavigation();
   return (
     <View
       style={{

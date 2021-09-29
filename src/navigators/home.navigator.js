@@ -4,6 +4,7 @@ import { CartScreen, HomeScreen } from "../screens/home";
 import { PaymentScreen } from "~app/screens/home/payment.screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MapScreen } from "~app/screens/home/map.screen";
 
 const Home = createDrawerNavigator();
 const Cart = createNativeStackNavigator();
@@ -12,6 +13,11 @@ const CartPayment = () => {
   return (
     <Cart.Navigator>
       <Cart.Screen component={CartScreen} name="Cart" />
+      <Cart.Screen
+        component={MapScreen}
+        name="Payment Map"
+        options={{ contentStyle: { backgroundColor: "#fff" } }}
+      />
       <Cart.Screen
         component={PaymentScreen}
         name="Payment"

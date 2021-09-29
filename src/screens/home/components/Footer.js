@@ -4,7 +4,7 @@ import { View, StyleSheet } from "react-native";
 import { Button } from "~app/components";
 import { Total } from "./Total";
 
-export const Footer = () => {
+export const Footer = ({ disabled }) => {
   const { containerStyle } = styles;
   const navigation = useNavigation();
   return (
@@ -13,7 +13,11 @@ export const Footer = () => {
       <Button
         buttonText="Go to checkout"
         primary
-        onPress={() => navigation.navigate("Payment")}
+        onPress={() =>
+          disabled
+            ? toast.show("Your cart is empty")
+            : navigation.navigate("Payment")
+        }
       />
     </View>
   );

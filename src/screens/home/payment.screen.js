@@ -1,12 +1,16 @@
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
-import { Button, useToast } from "native-base";
+import { Button, useToast, Input } from "native-base";
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { useSelector } from "react-redux";
 import { api } from "~app/api";
 
-export const PaymentScreen = () => {
+export const PaymentScreen = ({ navigation: { navigate } }) => {
+  const user = useSelector((state) => state.auth.user);
   const [card, setCard] = useState();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(user.email || "");
+  const [address, setAddress] = useState("");
+
   const { confirmPayment, loading } = useConfirmPayment();
   const toast = useToast();
 
@@ -40,13 +44,21 @@ export const PaymentScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
+      <Input
+        style={styles.input}
+        placeholder="Address"
+        autoCapitalize="none"
+        value={address}
+        onFocus={() => navigate("Address")}
+      />
+      <Input
         style={styles.input}
         placeholder="E-mail"
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
+        isDisabled
       />
       <CardField
         postalCodeEnabled
@@ -63,8 +75,8 @@ export const PaymentScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     margin: 20,
+    marginVertical: 30,
   },
   input: {
     backgroundColor: "#efefef",
@@ -72,12 +84,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 50,
     padding: 10,
+    marginBottom: 30,
   },
   card: {
     backgroundColor: "#efefef",
   },
   cardContainer: {
     height: 50,
-    marginVertical: 30,
+    marginBottom: 30,
   },
 });

@@ -63,7 +63,7 @@ export const CartScreen = ({ navigation }) => {
           ListEmptyComponent={<CartEmpty />}
         />
       </View>
-      <Footer />
+      <Footer disabled={!shop.cart.length > 0} />
     </View>
   );
 };

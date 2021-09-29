@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Icon, IconButton } from "native-base";
+import { Feather } from "@expo/vector-icons";
 
 export const CartItem = ({ item, lastItem, removeFromCart, addToCart }) => {
   const {
@@ -39,19 +40,18 @@ export const CartItem = ({ item, lastItem, removeFromCart, addToCart }) => {
       </View>
 
       <View style={counterStyle}>
-        <Icon.Button
-          name="ios-remove"
-          size={25}
-          iconStyle={{ marginRight: 0 }}
+        <IconButton
+          icon={<Icon as={Feather} name="minus" />}
+          borderRadius="full"
           onPress={removeFromCart}
         />
 
         <Text>{item.amount}</Text>
 
-        <Icon.Button
-          name="ios-add"
-          size={25}
-          iconStyle={{ marginRight: 0 }}
+        <IconButton
+          icon={<Icon as={Feather} name="plus" />}
+          size="sm"
+          borderRadius="full"
           onPress={addToCart}
         />
       </View>
