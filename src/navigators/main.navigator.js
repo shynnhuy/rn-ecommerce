@@ -6,6 +6,7 @@ import { AccountNavigator } from "./account.navigator";
 import { NotificationScreen } from "../screens/notification/notification.screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MapScreen } from "~app/screens/home/map.screen";
+import { AdminNavigator } from "./admin.navigator";
 
 const Main = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -66,6 +67,11 @@ export const MainNavigator = () => {
       <Stack.Screen
         name="Main"
         component={MainNav}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Admin"
+        component={AdminNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Address" component={MapScreen} />

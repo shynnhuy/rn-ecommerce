@@ -1,31 +1,33 @@
-import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
-import { Button, useToast, Input } from "native-base";
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, View, Keyboard } from "react-native";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import { Button, useToast, Input, Icon, FormControl, Radio } from "native-base";
+import { Entypo } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { api } from "~app/api";
+import { useLocationContext } from "~app/context";
+import { userSelector } from "~app/redux/auth";
+import { selectCartTotal } from "~app/redux/shop";
 
-export const PaymentScreen = ({ navigation: { navigate } }) => {
-  const user = useSelector((state) => state.auth.user);
+const CreditPayment = ({ email, submit }) => {
   const [card, setCard] = useState();
-  const [email, setEmail] = useState(user.email || "");
-  const [address, setAddress] = useState("");
+  const total = useSelector(selectCartTotal);
 
   const { confirmPayment, loading } = useConfirmPayment();
+
   const toast = useToast();
 
   const onPayment = async () => {
-    if (!card?.complete) {
-      Alert.alert("Please enter your card details");
-      return;
-    }
+    Keyboard.dismiss();
 
     const billingDetails = {
-      email,
+      email: email,
     };
 
     try {
-      const { result } = await api.post("/payment/intent");
+      const { result } = await api.post("/order/payment-intent", {
+        price: total,
+      });
       const { paymentIntent, error } = await confirmPayment(result, {
         type: "Card",
         billingDetails: billingDetails,
@@ -35,7 +37,7 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
         console.log(error);
       } else if (Boolean(paymentIntent)) {
         toast.show("Payment successfully");
-        console.log("SUCCESS ", paymentIntent);
+        submit();
       }
     } catch (error) {
       console.log(error);
@@ -43,23 +45,7 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Input
-        style={styles.input}
-        placeholder="Address"
-        autoCapitalize="none"
-        value={address}
-        onFocus={() => navigate("Address")}
-      />
-      <Input
-        style={styles.input}
-        placeholder="E-mail"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-        isDisabled
-      />
+    <View>
       <CardField
         postalCodeEnabled
         placeholder={{ number: "4242 4242 4242 4242" }}
@@ -67,7 +53,89 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
         cardStyle={styles.card}
         onCardChange={(details) => setCard(details)}
       />
-      <Button onPress={onPayment}>Pay $200</Button>
+      <Button onPress={onPayment}>{`Pay $${total} and Place Order`}</Button>
+    </View>
+  );
+};
+
+export const PaymentScreen = ({ navigation: { navigate } }) => {
+  const user = useSelector(userSelector);
+  const [fullName, setFullName] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState(0);
+
+  const {
+    location: { address },
+  } = useLocationContext();
+
+  const placeOrder = () => {
+    if (!fullName || !address) {
+      Alert.alert("Please fill all input.");
+      return;
+    }
+    try {
+      Alert.alert("PLACE ORDER");
+    } catch (error) {
+      Alert.alert("Error");
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <FormControl>
+        <FormControl.Label>Fullname</FormControl.Label>
+        <Input
+          placeholder="Enter your name"
+          overflow="visible"
+          value={fullName}
+          onChangeText={setFullName}
+        />
+      </FormControl>
+      <FormControl style={{ marginTop: 20 }}>
+        <FormControl.Label>Address</FormControl.Label>
+        <Input
+          placeholder="Address"
+          overflow="hidden"
+          value={address}
+          InputRightElement={
+            <Button roundedLeft="0" onPress={() => navigate("Address")}>
+              <Icon
+                as={<Entypo name="chevron-right" />}
+                color="white"
+                size="sm"
+              />
+            </Button>
+          }
+        />
+      </FormControl>
+      <FormControl style={{ marginTop: 20 }}>
+        <FormControl.Label>Email</FormControl.Label>
+        <Input
+          style={styles.input}
+          placeholder="E-mail"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={user.email}
+          isDisabled
+        />
+      </FormControl>
+      <FormControl>
+        <FormControl.Label>Payment Method</FormControl.Label>
+        <Radio.Group value={paymentMethod} onChange={setPaymentMethod}>
+          <Radio value={0} my={1}>
+            Cash
+          </Radio>
+          <Radio value={2} my={1}>
+            Credit Card
+          </Radio>
+        </Radio.Group>
+      </FormControl>
+      {paymentMethod === 0 ? (
+        <Button style={styles.btnOrder} onPress={placeOrder}>
+          Place Order
+        </Button>
+      ) : (
+        <CreditPayment email={user.email} submit={placeOrder} />
+      )}
     </View>
   );
 };
@@ -76,21 +144,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 20,
-    marginVertical: 30,
   },
   input: {
-    backgroundColor: "#efefef",
-    borderRadius: 8,
-    fontSize: 20,
-    height: 50,
-    padding: 10,
-    marginBottom: 30,
+    marginBottom: 20,
+  },
+  btnOrder: {
+    marginTop: 20,
   },
   card: {
     backgroundColor: "#efefef",
   },
   cardContainer: {
     height: 50,
-    marginBottom: 30,
+    marginVertical: 20,
   },
 });

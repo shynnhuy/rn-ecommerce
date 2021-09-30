@@ -9,6 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { configureStore } from "./redux/store";
 import { Loading } from "./components";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import { LocationProvider } from "./context/location.context";
 
 const { store, persistor } = configureStore();
 
@@ -20,7 +21,9 @@ export const Provider = ({ children }) => {
           <ToastProvider>
             <NavigationContainer>
               <StripeProvider publishableKey="pk_test_51JeMNvCQ0GIWHF67o9tM2hNxRJeh4IXwaeLf22HcxutlFiT7GzuiO3S1QnsAEgrfFTpljKG6b2GxIdViIGrvjntE00bS7xUptf">
-                <SafeAreaProvider>{children}</SafeAreaProvider>
+                <LocationProvider>
+                  <SafeAreaProvider>{children}</SafeAreaProvider>
+                </LocationProvider>
               </StripeProvider>
             </NavigationContainer>
           </ToastProvider>

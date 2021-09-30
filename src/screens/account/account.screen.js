@@ -9,22 +9,23 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
-import Img from "~app/assets/splash.png";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { isAdminSelector, userSelector } from "~app/redux/auth";
 
-const UserBox = ({user, onPress}) => (
+const UserBox = ({ user, onPress }) => (
   <Pressable
-    style={({pressed}) => [
+    style={({ pressed }) => [
       styles.infoContainer,
       {
         borderBottomWidth: pressed ? 1 : 3,
         marginTop: pressed ? 19 : 15,
       },
     ]}
-    onPress={onPress}>
-    <Image source={Img} style={styles.avatar} />
+    onPress={onPress}
+  >
+    <Image source={{ uri: user.avatar }} style={styles.avatar} />
     <View style={styles.info}>
       <Text style={styles.email}>{user.email}</Text>
       <Text style={styles.date}>
@@ -34,26 +35,31 @@ const UserBox = ({user, onPress}) => (
   </Pressable>
 );
 
-export const AccountScreen = ({navigation: {navigate}}) => {
-  const auth = useSelector(state => state.auth);
+export const AccountScreen = ({ navigation: { navigate } }) => {
+  const user = useSelector(userSelector);
+  const isAdmin = useSelector(isAdminSelector);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.iconContainer}>
+        {isAdmin && (
+          <TouchableOpacity
+            style={styles.headerBtn}
+            onPress={() => navigate("Admin")}
+          >
+            <Ionicons name="shield-checkmark-outline" size={28} color="gray" />
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={styles.headerBtn}
-          onPress={() => toast.show("Go to cart", {type: "success"})}>
-          <Ionicons name="cart-outline" size={28} color="gray" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.headerBtn}
-          onPress={() => navigate("Setting")}>
+          onPress={() => navigate("Setting")}
+        >
           <Ionicons name="cog-outline" size={28} color="gray" />
         </TouchableOpacity>
       </View>
 
-      {auth.user && (
-        <UserBox user={auth.user} onPress={() => navigate("Profile")} />
+      {Boolean(user) && (
+        <UserBox user={user} onPress={() => navigate("Profile")} />
       )}
     </SafeAreaView>
   );
@@ -93,6 +99,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 80,
     height: 80,
+    borderRadius: 99,
   },
   info: {
     paddingHorizontal: 10,
