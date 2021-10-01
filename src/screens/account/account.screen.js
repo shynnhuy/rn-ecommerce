@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -9,10 +9,16 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { isAdminSelector, userSelector } from "~app/redux/auth";
+import {
+  actionFetchOrders,
+  authSelector,
+  isAdminSelector,
+  userSelector,
+} from "~app/redux/auth";
+import { MyOrders } from "./components/MyOrders";
 
 const UserBox = ({ user, onPress }) => (
   <Pressable
@@ -36,8 +42,13 @@ const UserBox = ({ user, onPress }) => (
 );
 
 export const AccountScreen = ({ navigation: { navigate } }) => {
-  const user = useSelector(userSelector);
+  const auth = useSelector(authSelector);
   const isAdmin = useSelector(isAdminSelector);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(actionFetchOrders());
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,9 +69,11 @@ export const AccountScreen = ({ navigation: { navigate } }) => {
         </TouchableOpacity>
       </View>
 
-      {Boolean(user) && (
-        <UserBox user={user} onPress={() => navigate("Profile")} />
+      {Boolean(auth.user) && (
+        <UserBox user={auth.user} onPress={() => navigate("Profile")} />
       )}
+
+      <MyOrders loading={auth.loading} orders={auth.orders} />
     </SafeAreaView>
   );
 };

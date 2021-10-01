@@ -20,15 +20,10 @@ export const MapScreen = ({ navigation }) => {
   const setAddress = (address) => dispatch(setUserAddress(address));
 
   const [error] = useLocation(setCoords, setAddress);
-  // const [region, setRegion] = useState(location || null);
-
-  // console.log(address);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <Button title="OK" onPress={() => navigation.pop()} />
-      ),
+      headerRight: () => <Button title="OK" onPress={() => navigation.pop()} />,
     });
   }, [navigation]);
 

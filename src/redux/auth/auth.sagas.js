@@ -13,8 +13,11 @@ import {
   actionUpdateAvatarSuccess,
   actionUpdateInfoError,
   actionUpdateInfoSuccess,
+  actionFetchOrdersError,
+  actionFetchOrdersSuccess,
 } from "./auth.actions";
 import {
+  FETCH_ORDERS,
   LOGIN,
   LOGOUT,
   REGISTER,
@@ -26,12 +29,14 @@ import {
   apiRegister,
   apiUpdateAvatar,
   apiUpdateInfo,
+  apiFetchMyOrders,
 } from "./auth.services";
 
 function* login(payload) {
   try {
     yield put(sendRequest());
     const data = yield call(apiLogin, payload);
+    // console.log(data);
     yield call(setAccessToken, data.result.token);
     yield put(actionLoginSuccess(data.result));
   } catch (error) {
@@ -84,6 +89,16 @@ function* uploadAvatar({ payload }) {
     yield put(actionUpdateAvatarError(error.message));
   }
 }
+function* fetchOrders() {
+  try {
+    yield put(sendRequest());
+    const data = yield call(apiFetchMyOrders);
+    // console.log(data);
+    yield put(actionFetchOrdersSuccess(data.result));
+  } catch (error) {
+    yield put(actionFetchOrdersError(error.result));
+  }
+}
 
 function* loginFlow() {
   while (true) {
@@ -107,22 +122,26 @@ function* registerFlow() {
   }
 }
 
-export function* logoutFlow() {
+function* logoutFlow() {
   while (true) {
     yield take(LOGOUT.PENDING);
     yield call(logout);
   }
 }
 
-export function* updateInfoFlow() {
+function* updateInfoFlow() {
   while (true) {
     const { payload } = yield take(UPDATE_INFO.PENDING);
     yield fork(updateInfo, payload);
   }
 }
 
-export function* updateAvatarFlow() {
+function* updateAvatarFlow() {
   yield takeLatest(UPDATE_AVATAR.PENDING, uploadAvatar);
+}
+
+function* fetchMyOrders() {
+  yield takeLatest(FETCH_ORDERS.PENDING, fetchOrders);
 }
 
 export function* authSaga() {
@@ -131,4 +150,5 @@ export function* authSaga() {
   yield fork(logoutFlow);
   yield fork(updateInfoFlow);
   yield fork(updateAvatarFlow);
+  yield fork(fetchMyOrders);
 }

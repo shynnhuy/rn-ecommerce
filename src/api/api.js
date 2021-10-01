@@ -1,7 +1,14 @@
 import axios from "axios";
-import { getAccessToken } from "../utils";
+import {
+  getAccessToken,
+  getRefreshToken,
+  isTokenExpired,
+  setAccessToken,
+  setRefreshToken,
+} from "../utils";
+import { handleRefresh } from "./refreshApi";
 
-const baseURL = "http://192.168.1.113:5000/api/v1";
+const baseURL = "http://192.168.1.74:5000/api/v1";
 
 const api = axios.create({
   baseURL,
@@ -10,8 +17,26 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const token = await getAccessToken();
+    // console.log(token);
     if (Boolean(token)) {
+      //   if (!isTokenExpired(token)) {
       config.headers.Authorization = `Bearer ${token}`;
+      return config;
+      //   } else {
+      //     console.log("REFRESH");
+      //     const refreshToken = await getRefreshToken();
+
+      //     if (Boolean(refreshToken)) {
+      //       const newToken = await handleRefresh(refreshToken);
+      //       if (newToken && newToken.status === 200) {
+      //         await setAccessToken(newToken.accessToken);
+      //         await setRefreshToken(newToken.refreshToken);
+
+      //         config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+      //         return config;
+      //       }
+      //     }
+      //   }
     }
     return config;
   },

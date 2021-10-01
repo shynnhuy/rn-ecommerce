@@ -1,5 +1,6 @@
 import {
   CLEAR_ERROR,
+  FETCH_ORDERS,
   LOGIN,
   LOGOUT,
   REGISTER,
@@ -75,5 +76,17 @@ export const actionUpdateAvatarSuccess = payload => ({
 });
 export const actionUpdateAvatarError = error => ({
   type: UPDATE_AVATAR.ERROR,
+  error,
+});
+
+export const actionFetchOrders = () => ({
+  type: FETCH_ORDERS.PENDING,
+});
+export const actionFetchOrdersSuccess = payload => ({
+  type: FETCH_ORDERS.SUCCESS,
+  payload,
+});
+export const actionFetchOrdersError = error => ({
+  type: FETCH_ORDERS.ERROR,
   error,
 });

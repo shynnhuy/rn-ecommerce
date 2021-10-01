@@ -8,3 +8,5 @@ export const REGISTER = createActionSet("auth/REGISTER");
 export const LOGOUT = createActionSet("auth/LOGOUT");
 export const UPDATE_INFO = createActionSet("auth/UPDATE_INFO");
 export const UPDATE_AVATAR = createActionSet("auth/UPDATE_AVATAR");
+
+export const FETCH_ORDERS = createActionSet("auth/FETCH_ORDERS");

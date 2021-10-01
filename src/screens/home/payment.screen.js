@@ -1,81 +1,63 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, View, Keyboard } from "react-native";
-import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
-import { Button, useToast, Input, Icon, FormControl, Radio } from "native-base";
+import { Alert, StyleSheet, View } from "react-native";
+import { Button, Input, Icon, FormControl, Radio, useToast } from "native-base";
 import { Entypo } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { api } from "~app/api";
+
+import { CreditPayment } from "./components/CreditPayment";
+
 import { useLocationContext } from "~app/context";
+
 import { userSelector } from "~app/redux/auth";
-import { selectCartTotal } from "~app/redux/shop";
+import { selectCart, selectCartTotal } from "~app/redux/shop";
 
-const CreditPayment = ({ email, submit }) => {
-  const [card, setCard] = useState();
-  const total = useSelector(selectCartTotal);
-
-  const { confirmPayment, loading } = useConfirmPayment();
-
-  const toast = useToast();
-
-  const onPayment = async () => {
-    Keyboard.dismiss();
-
-    const billingDetails = {
-      email: email,
-    };
-
-    try {
-      const { result } = await api.post("/order/payment-intent", {
-        price: total,
-      });
-      const { paymentIntent, error } = await confirmPayment(result, {
-        type: "Card",
-        billingDetails: billingDetails,
-      });
-      if (error) {
-        toast.show("Error");
-        console.log(error);
-      } else if (Boolean(paymentIntent)) {
-        toast.show("Payment successfully");
-        submit();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <View>
-      <CardField
-        postalCodeEnabled
-        placeholder={{ number: "4242 4242 4242 4242" }}
-        style={styles.cardContainer}
-        cardStyle={styles.card}
-        onCardChange={(details) => setCard(details)}
-      />
-      <Button onPress={onPayment}>{`Pay $${total} and Place Order`}</Button>
-    </View>
-  );
-};
+import { api } from "~app/api";
 
 export const PaymentScreen = ({ navigation: { navigate } }) => {
   const user = useSelector(userSelector);
+  const cart = useSelector(selectCart);
+  const total = useSelector(selectCartTotal);
   const [fullName, setFullName] = useState("");
   const [paymentMethod, setPaymentMethod] = useState(0);
+
+  const toast = useToast();
 
   const {
     location: { address },
   } = useLocationContext();
 
-  const placeOrder = () => {
+  const placeOrder = async (paid = false) => {
     if (!fullName || !address) {
       Alert.alert("Please fill all input.");
       return;
     }
     try {
-      Alert.alert("PLACE ORDER");
+      const formatProducts = cart.map((item) => ({
+        product: item._id,
+        price: item.price.new,
+        amount: item.amount,
+      }));
+
+      const data = await api.post("/order", {
+        name: fullName,
+        email: user.email,
+        address,
+        total,
+        products: formatProducts,
+        paid,
+      });
+
+      toast.show({
+        title: "Order success",
+        description: data.message,
+        status: "success",
+      });
     } catch (error) {
-      Alert.alert("Error");
+      toast.show({
+        title: "Order error",
+        description: error.message,
+        status: "error",
+      });
     }
   };
 
@@ -134,7 +116,7 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
           Place Order
         </Button>
       ) : (
-        <CreditPayment email={user.email} submit={placeOrder} />
+        <CreditPayment email={user.email} total={total} submit={placeOrder} />
       )}
     </View>
   );
@@ -150,12 +132,5 @@ const styles = StyleSheet.create({
   },
   btnOrder: {
     marginTop: 20,
-  },
-  card: {
-    backgroundColor: "#efefef",
-  },
-  cardContainer: {
-    height: 50,
-    marginVertical: 20,
   },
 });

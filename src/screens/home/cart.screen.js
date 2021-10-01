@@ -19,6 +19,8 @@ import {
 import { CartEmpty } from "./components/CartEmpty";
 import { CartItem } from "./components/CartItem";
 import { Footer } from "./components/Footer";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 export const CartScreen = ({ navigation }) => {
   const shop = useSelector((state) => state.shop);
@@ -54,7 +56,8 @@ export const CartScreen = ({ navigation }) => {
     );
   };
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar style="dark" />
       <View style={{ flex: 4 }}>
         <FlatList
           keyExtractor={(item) => item._id}
@@ -64,7 +67,7 @@ export const CartScreen = ({ navigation }) => {
         />
       </View>
       <Footer disabled={!shop.cart.length > 0} />
-    </View>
+    </SafeAreaView>
   );
 };
 
