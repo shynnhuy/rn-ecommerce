@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 20,
+    resizeMode: "contain"
   },
   textStyle: {
     flex: 2,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   },
   priceStyle: {
     backgroundColor: "#ddd",
-    width: 40,
+    width: 50,
     alignItems: "center",
     marginTop: 3,
     borderRadius: 3,

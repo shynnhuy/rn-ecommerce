@@ -1,9 +1,17 @@
 import React from "react";
-import { StyleSheet, Text, Pressable, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/core";
 
 export const Product = ({
+  _id,
   name,
   price,
   description,
@@ -12,8 +20,12 @@ export const Product = ({
   addToCart,
   addToWishlist,
 }) => {
+  const { navigate } = useNavigation();
   return (
-    <View style={styles.product}>
+    <TouchableOpacity
+      onPress={() => navigate("Details", { _id })}
+      style={styles.product}
+    >
       <SliderBox
         images={images}
         ImageComponentStyle={{
@@ -68,7 +80,7 @@ export const Product = ({
           </Pressable>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

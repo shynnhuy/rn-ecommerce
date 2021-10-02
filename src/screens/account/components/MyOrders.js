@@ -9,10 +9,15 @@ import {
 } from "@expo/vector-icons";
 
 import { actionFetchOrders, authSelector } from "~app/redux/auth";
+import { useNavigation } from "@react-navigation/core";
 
 const OrderItem = ({ count, title, icon }) => {
+  const { navigate } = useNavigation();
   return (
-    <TouchableOpacity style={styles.box}>
+    <TouchableOpacity
+      style={styles.box}
+      onPress={() => navigate("Order", { title })}
+    >
       <View>
         {count > 0 && (
           <Badge

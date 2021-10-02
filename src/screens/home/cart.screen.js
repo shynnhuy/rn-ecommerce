@@ -50,8 +50,8 @@ export const CartScreen = ({ navigation }) => {
       <CartItem
         item={item}
         lastItem={index + 1 === shop.cart.length}
-        removeFromCart={() => removeFromCart(item)}
-        addToCart={() => addToCart(item)}
+        removeFromCart={() => removeFromCart({ product: item })}
+        addToCart={() => addToCart({ product: item })}
       />
     );
   };

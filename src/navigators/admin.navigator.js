@@ -37,7 +37,7 @@ export const AdminNavigator = () => {
         name="Admin Users"
         component={UsersScreen}
         options={({ navigation }) => ({
-          headerTitle: "Dashboard",
+          headerTitle: "Users",
           tabBarLabel: "Dashboard",
           headerLeft: (props) => (
             <BackButton {...props} navigation={navigation} />

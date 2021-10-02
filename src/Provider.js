@@ -10,6 +10,8 @@ import { configureStore } from "./redux/store";
 import { Loading } from "./components";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { LocationProvider } from "./context/location.context";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "./api";
 
 const { store, persistor } = configureStore();
 
@@ -17,17 +19,19 @@ export const Provider = ({ children }) => {
   return (
     <ReduxProvider store={store}>
       <PersistGate persistor={persistor} loading={<Loading />}>
-        <NativeBaseProvider>
-          <ToastProvider>
-            <NavigationContainer>
-              <StripeProvider publishableKey="pk_test_51JeMNvCQ0GIWHF67o9tM2hNxRJeh4IXwaeLf22HcxutlFiT7GzuiO3S1QnsAEgrfFTpljKG6b2GxIdViIGrvjntE00bS7xUptf">
-                <LocationProvider>
-                  <SafeAreaProvider>{children}</SafeAreaProvider>
-                </LocationProvider>
-              </StripeProvider>
-            </NavigationContainer>
-          </ToastProvider>
-        </NativeBaseProvider>
+        <QueryClientProvider client={queryClient}>
+          <NativeBaseProvider>
+            <ToastProvider>
+              <NavigationContainer>
+                <StripeProvider publishableKey="pk_test_51JeMNvCQ0GIWHF67o9tM2hNxRJeh4IXwaeLf22HcxutlFiT7GzuiO3S1QnsAEgrfFTpljKG6b2GxIdViIGrvjntE00bS7xUptf">
+                  <LocationProvider>
+                    <SafeAreaProvider>{children}</SafeAreaProvider>
+                  </LocationProvider>
+                </StripeProvider>
+              </NavigationContainer>
+            </ToastProvider>
+          </NativeBaseProvider>
+        </QueryClientProvider>
       </PersistGate>
     </ReduxProvider>
   );

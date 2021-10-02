@@ -27,12 +27,6 @@ export const HomeNavigator = () => {
       screenOptions={{
         drawerType: "front",
         drawerContentStyle: { backgroundColor: "#fff" },
-        headerLeft: (props) => (
-          <MaterialCommunityIcons
-            name="menu"
-            style={{ fontSize: 25, marginHorizontal: 15 }}
-          />
-        ),
       }}
     >
       <Home.Screen

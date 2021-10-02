@@ -1,12 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { HomeNavigator } from "./home.navigator";
 import { AccountNavigator } from "./account.navigator";
 import { NotificationScreen } from "../screens/notification/notification.screen";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MapScreen } from "~app/screens/home/map.screen";
 import { AdminNavigator } from "./admin.navigator";
+
+import { MapScreen, DetailsScreen } from "~app/screens/home";
 
 const Main = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -75,6 +76,7 @@ export const MainNavigator = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Address" component={MapScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
     </Stack.Navigator>
   );
 };
