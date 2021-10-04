@@ -12,7 +12,11 @@ const Order = createNativeStackNavigator();
 
 const OrderNavigator = () => {
   return (
-    <Order.Navigator screenOptions={{ headerShown: false }}>
+    <Order.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Order.Screen name="Account" component={AccountScreen} />
       <Order.Screen name="Order" component={OrderScreen} />
     </Order.Navigator>

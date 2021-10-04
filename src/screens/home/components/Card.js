@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import { Image } from "native-base";
+import { IconButton, Image, Icon } from "native-base";
 import React from "react";
 import {
   Dimensions,
@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { Feather } from "@expo/vector-icons";
 import { COLORS, financial } from "~app/utils";
 
 const width = Dimensions.get("window").width / 2 - 30;
 
-export const Card = ({ product }) => {
+export const Card = ({ product, addToCart }) => {
   const { navigate } = useNavigation();
   //   console.log(product.images[0]);
   return (
@@ -82,7 +82,15 @@ export const Card = ({ product }) => {
           <Text style={{ fontSize: 19, fontWeight: "400" }}>
             ${financial(product.price?.new)}
           </Text>
-          <View
+          <IconButton
+            onPress={addToCart}
+            icon={<Icon as={Feather} name="shopping-cart" />}
+            _icon={{
+              color: "green.500",
+              size: "sm",
+            }}
+          />
+          {/* <View
             style={{
               height: 25,
               width: 25,
@@ -97,7 +105,7 @@ export const Card = ({ product }) => {
             >
               +
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </TouchableOpacity>

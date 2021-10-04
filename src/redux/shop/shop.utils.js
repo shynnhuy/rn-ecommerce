@@ -20,3 +20,13 @@ export const removeFromCart = (cart = [], { product, amount = 1 }) => {
   }
   return cart.filter((item) => item._id !== product._id);
 };
+
+export const searchProducts = (products = [], value) => {
+  if (value) {
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(value)
+    );
+  } else {
+    return [];
+  }
+};

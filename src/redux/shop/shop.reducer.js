@@ -3,15 +3,17 @@ import {
   EMPTY_CART,
   FETCH_PRODUCTS,
   REMOVE_FROM_CART,
+  SEARCH_PRODUCT,
   SEND_REQUEST,
 } from "./shop.constants";
-import { addToCart, removeFromCart } from "./shop.utils";
+import { addToCart, removeFromCart, searchProducts } from "./shop.utils";
 
 const initialState = {
   loading: false,
   products: [],
   cart: [],
   error: null,
+  filteredProducts: [],
 };
 
 export const shopReducer = (state = initialState, { type, payload, error }) => {
@@ -35,6 +37,11 @@ export const shopReducer = (state = initialState, { type, payload, error }) => {
     }
     case EMPTY_CART: {
       return { ...state, cart: [] };
+    }
+
+    case SEARCH_PRODUCT: {
+      const newProducts = searchProducts(state.products, payload);
+      return { ...state, filteredProducts: newProducts };
     }
 
     default:

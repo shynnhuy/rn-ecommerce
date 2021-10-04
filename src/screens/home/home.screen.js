@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { FlatList, StyleSheet, TextInput, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { IconButton, Icon } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import { Loading } from "~app/components";
 import {
@@ -11,6 +12,8 @@ import {
 } from "~redux/shop";
 import { HeaderCart } from "./components/HeaderCart";
 import { Card } from "./components/Card";
+import { SearchBar } from "./components/SearchBar";
+import { StatusBar } from "expo-status-bar";
 // import { Product } from "./components/Product";
 
 export const HomeScreen = ({ navigation }) => {
@@ -31,11 +34,16 @@ export const HomeScreen = ({ navigation }) => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <Card product={item} addToCart={() => dispatch(actionAddToCart(item))} />
+    <Card
+      product={item}
+      addToCart={() => dispatch(actionAddToCart({ product: item }))}
+    />
   );
   // const renderItem = ({ item }) => (
   //   <Product {...item} addToCart={() => dispatch(actionAddToCart(item))} />
   // );
+
+  const onSearch = (search) => navigation.navigate("Search", { search });
 
   if (shop.loading) {
     return <Loading />;
@@ -43,14 +51,21 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <View style={{ marginVertical: 15, flexDirection: "row" }}>
-        <View style={styles.searchContainer}>
-          <Icon name="search" size={25} style={{ marginLeft: 20 }} />
-          <TextInput placeholder="Search" style={styles.input} />
-        </View>
-        <View style={styles.sortBtn}>
-          <Icon name="sort" size={30} color={"#fff"} />
-        </View>
+        <SearchBar onSearch={onSearch} />
+        <IconButton
+          onPress={() => console.log("Filter")}
+          variant="solid"
+          bg="green.600"
+          _pressed={{
+            bg: "green.400",
+          }}
+          style={styles.sortBtn}
+          icon={
+            <Icon as={MaterialIcons} name="sort" size={30} color={"#fff"} />
+          }
+        />
       </View>
       <FlatList
         columnWrapperStyle={{ justifyContent: "space-between" }}
@@ -73,26 +88,9 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "#fff",
   },
-  searchContainer: {
-    height: 50,
-    backgroundColor: "#f1f1f1",
-    borderRadius: 10,
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  input: {
-    fontSize: 18,
-    fontWeight: "bold",
-    flex: 1,
-    color: "#000",
-  },
   sortBtn: {
-    marginLeft: 10,
-    height: 50,
-    width: 50,
+    marginLeft: 20,
     borderRadius: 10,
-    backgroundColor: "#00B761",
     justifyContent: "center",
     alignItems: "center",
   },

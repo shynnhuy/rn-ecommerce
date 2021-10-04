@@ -3,6 +3,7 @@ import {
   EMPTY_CART,
   FETCH_PRODUCTS,
   REMOVE_FROM_CART,
+  SEARCH_PRODUCT,
 } from "./shop.constants";
 
 export const actionFetchProducts = () => ({
@@ -29,4 +30,9 @@ export const actionRemoveFromCart = (payload) => ({
 
 export const actionEmptyCart = () => ({
   type: EMPTY_CART,
+});
+
+export const actionFilterProducts = (value) => ({
+  type: SEARCH_PRODUCT,
+  payload: value,
 });

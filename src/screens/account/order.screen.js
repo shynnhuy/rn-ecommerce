@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import { Box, FlatList, HStack, VStack, Text } from "native-base";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -6,7 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useSelector } from "react-redux";
 import { selectOrderByStatus } from "~app/redux/auth";
-import { financial } from "~app/utils";
+import { capitalize, financial } from "~app/utils";
+import { EmptyOrder } from "./components/EmptyOrder";
 
 export const OrderScreen = ({ navigation, route }) => {
   const { title } = route.params;
@@ -53,16 +55,22 @@ export const OrderScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={28} />
         </TouchableOpacity>
+        <Text fontWeight="bold" fontSize={20}>
+          {capitalize(title)} orders
+        </Text>
+        <View />
       </View>
 
       <FlatList
         data={orders}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
+        ListEmptyComponent={<EmptyOrder />}
       />
     </SafeAreaView>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Icon, IconButton } from "native-base";
 import { Feather } from "@expo/vector-icons";
+import { financial } from "~app/utils";
 
 export const CartItem = ({ item, lastItem, removeFromCart, addToCart }) => {
   const {
@@ -28,12 +29,12 @@ export const CartItem = ({ item, lastItem, removeFromCart, addToCart }) => {
                 textDecorationStyle: "solid",
               }}
             >
-              ${item.price.old}
+              ${financial(item.price.old)}
             </Text>
           </View>
           <View style={priceStyle}>
             <Text style={{ color: "#2e2f30", fontSize: 12 }}>
-              ${item.price.new}
+              ${financial(item.price.new)}
             </Text>
           </View>
         </View>
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 20,
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
   textStyle: {
     flex: 2,
@@ -88,11 +89,12 @@ const styles = StyleSheet.create({
   },
   priceStyle: {
     backgroundColor: "#ddd",
-    width: 50,
     alignItems: "center",
     marginTop: 3,
     borderRadius: 3,
     marginRight: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2
   },
   counterStyle: {
     flex: 1,
