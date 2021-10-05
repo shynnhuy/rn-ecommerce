@@ -12,47 +12,13 @@ import {
 
 const screenWidth = Dimensions.get("screen").width;
 const data = [
-  {
-    name: "Seoul",
-    population: 21500000,
-    color: "rgba(131, 167, 234, 1)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Toronto",
-    population: 2800000,
-    color: "#F00",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Beijing",
-    population: 527612,
-    color: "red",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "New York",
-    population: 8538000,
-    color: "#ffffff",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Moscow",
-    population: 11920000,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-];
-
+  { name: 'Seoul', population: 21500000, color: 'rgba(131, 167, 234, 1)', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'Toronto', population: 2800000, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'Beijing', population: 527612, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'New York', population: 8538000, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'Moscow', population: 11920000, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 }
+]
 const chartConfigs = {
-  backgroundColor: "#26872a",
-  backgroundGradientFrom: "#43a047",
-  backgroundGradientTo: "#66bb6a",
   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   style: {
     borderRadius: 16,
@@ -61,7 +27,7 @@ const chartConfigs = {
 
 export const DashboardScreen = () => {
   return (
-    <ScrollView paddingX="5" paddingY="5">
+    <ScrollView paddingY="5">
       <HStack
         flexWrap="wrap"
         justifyContent="space-between"
@@ -97,6 +63,18 @@ export const DashboardScreen = () => {
               },
             }}
             bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+            }}
+          />
+          <PieChart
+            data={data}
+            width={screenWidth}
+            height={200}
+            chartConfig={chartConfigs}
+            accessor="population"
+            backgroundColor="transparent"
             style={{
               marginVertical: 8,
               borderRadius: 16,
