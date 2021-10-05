@@ -2,11 +2,17 @@ import {
   ADD_TO_CART,
   EMPTY_CART,
   FETCH_PRODUCTS,
+  FILTER_CATEGORY,
   REMOVE_FROM_CART,
   SEARCH_PRODUCT,
   SEND_REQUEST,
 } from "./shop.constants";
-import { addToCart, removeFromCart, searchProducts } from "./shop.utils";
+import {
+  addToCart,
+  filterByCategory,
+  removeFromCart,
+  searchProducts,
+} from "./shop.utils";
 
 const initialState = {
   loading: false,
@@ -22,7 +28,12 @@ export const shopReducer = (state = initialState, { type, payload, error }) => {
       return { ...state, loading: true };
 
     case FETCH_PRODUCTS.SUCCESS:
-      return { ...state, products: payload, error: null };
+      return {
+        ...state,
+        products: payload,
+        filteredProducts: payload,
+        error: null,
+      };
     case FETCH_PRODUCTS.ERROR:
       return { ...state, error };
 
@@ -41,6 +52,11 @@ export const shopReducer = (state = initialState, { type, payload, error }) => {
 
     case SEARCH_PRODUCT: {
       const newProducts = searchProducts(state.products, payload);
+      return { ...state, filteredProducts: newProducts };
+    }
+
+    case FILTER_CATEGORY: {
+      const newProducts = filterByCategory(state.products, payload);
       return { ...state, filteredProducts: newProducts };
     }
 

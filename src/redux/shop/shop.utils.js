@@ -30,3 +30,8 @@ export const searchProducts = (products = [], value) => {
     return [];
   }
 };
+
+export const filterByCategory = (products = [], category) =>
+  category !== "all"
+    ? products.filter((product) => product.category.code === category)
+    : products;

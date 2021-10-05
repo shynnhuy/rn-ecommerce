@@ -9,3 +9,4 @@ export const REMOVE_FROM_CART = "shop/REMOVE_FROM_CART";
 export const EMPTY_CART = "shop/EMPTY_CART";
 
 export const SEARCH_PRODUCT = "shop/SEARCH_PRODUCT";
+export const FILTER_CATEGORY = "shop/FILTER_CATEGORY";

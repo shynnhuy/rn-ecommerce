@@ -2,6 +2,7 @@ import {
   ADD_TO_CART,
   EMPTY_CART,
   FETCH_PRODUCTS,
+  FILTER_CATEGORY,
   REMOVE_FROM_CART,
   SEARCH_PRODUCT,
 } from "./shop.constants";
@@ -35,4 +36,9 @@ export const actionEmptyCart = () => ({
 export const actionFilterProducts = (value) => ({
   type: SEARCH_PRODUCT,
   payload: value,
+});
+
+export const actionFilterByCategory = (payload) => ({
+  type: FILTER_CATEGORY,
+  payload,
 });

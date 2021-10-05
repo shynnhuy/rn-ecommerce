@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -14,12 +14,24 @@ import { HeaderCart } from "./components/HeaderCart";
 import { Card } from "./components/Card";
 import { SearchBar } from "./components/SearchBar";
 import { StatusBar } from "expo-status-bar";
+import { useQuery } from "react-query";
+import { api } from "~app/api";
+import { Categories } from "./components/Categories";
+import { ListEmpty } from "./components/ListEmpty";
+import { useModal } from "~app/hooks";
+import { Filter } from "./components/Filter";
 // import { Product } from "./components/Product";
+
+const fetchCategories = () => api.get("/products/categories");
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const shop = useSelector((state) => state.shop);
   const count = useSelector(selectCartCount);
+
+  const { data, isLoading } = useQuery("categories", fetchCategories);
+
+  const [filter, openFilter, closeFilter] = useModal();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -55,7 +67,7 @@ export const HomeScreen = ({ navigation }) => {
       <View style={{ marginVertical: 15, flexDirection: "row" }}>
         <SearchBar onSearch={onSearch} />
         <IconButton
-          onPress={() => console.log("Filter")}
+          onPress={openFilter}
           variant="solid"
           bg="green.600"
           _pressed={{
@@ -67,6 +79,10 @@ export const HomeScreen = ({ navigation }) => {
           }
         />
       </View>
+      <Filter open={filter} onClose={closeFilter} />
+
+      {!isLoading && <Categories categories={data?.result} />}
+
       <FlatList
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
@@ -75,9 +91,10 @@ export const HomeScreen = ({ navigation }) => {
           paddingBottom: 50,
         }}
         numColumns={2}
-        data={shop.products}
+        data={shop.filteredProducts}
         renderItem={renderItem}
         keyExtractor={(product) => product._id}
+        ListEmptyComponent={<ListEmpty />}
       />
     </View>
   );
@@ -87,6 +104,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 15,
     backgroundColor: "#fff",
+    flex: 1,
   },
   sortBtn: {
     marginLeft: 20,
