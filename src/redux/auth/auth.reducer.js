@@ -28,7 +28,7 @@ export const authReducer = (state = initialState, { type, payload, error }) => {
       return {
         ...state,
         loading: false,
-        token: payload.token,
+        token: payload.accessToken,
         user: payload.user,
         error: null,
       };
@@ -39,7 +39,7 @@ export const authReducer = (state = initialState, { type, payload, error }) => {
       return {
         ...state,
         loading: false,
-        token: payload.token,
+        token: payload.accessToken,
         user: payload.user,
         error: null,
       };

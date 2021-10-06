@@ -1,5 +1,10 @@
 import { put, fork, take, call, takeLatest } from "redux-saga/effects";
-import { getAccessToken, removeAccessToken, setAccessToken } from "../../utils";
+import {
+  getAccessToken,
+  removeAccessToken,
+  setAccessToken,
+  setRefreshToken,
+} from "../../utils";
 import {
   actionLoginError,
   actionLoginSuccess,
@@ -37,7 +42,8 @@ function* login(payload) {
     yield put(sendRequest());
     const data = yield call(apiLogin, payload);
     // console.log(data);
-    yield call(setAccessToken, data.result.token);
+    yield call(setAccessToken, data.result.accessToken);
+    yield call(setRefreshToken, data.result.refreshToken);
     yield put(actionLoginSuccess(data.result));
   } catch (error) {
     yield put(actionLoginError(error.message));
@@ -59,7 +65,8 @@ function* register(payload) {
   try {
     yield put(sendRequest());
     const data = yield call(apiRegister, payload);
-    yield call(setAccessToken, data.result.token);
+    yield call(setAccessToken, data.result.accessToken);
+    yield call(setRefreshToken, data.result.refreshToken);
     yield put(actionRegisterSuccess(data.result));
   } catch (error) {
     yield put(actionRegisterError(error.message));

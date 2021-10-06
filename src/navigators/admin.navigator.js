@@ -2,6 +2,8 @@ import { Icon } from "native-base";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ProductScreen } from "~app/screens/admin/product.screen";
 
 const { createBottomTabNavigator } = require("@react-navigation/bottom-tabs");
 const {
@@ -11,6 +13,7 @@ const {
 } = require("~app/screens/admin");
 
 const Admin = createBottomTabNavigator();
+const AdminProducts = createNativeStackNavigator();
 
 const BackButton = ({ navigation }) => {
   return (
@@ -34,6 +37,15 @@ const generateOptions = (name, icon, navigation = null) => ({
     navigation && <BackButton {...props} navigation={navigation} />,
 });
 
+const ProductsNavigator = () => {
+  return (
+    <AdminProducts.Navigator>
+      <AdminProducts.Screen name="List Products" component={ProductsScreen} />
+      <AdminProducts.Screen name="Admin Product" component={ProductScreen} />
+    </AdminProducts.Navigator>
+  );
+};
+
 export const AdminNavigator = () => {
   return (
     <Admin.Navigator>
@@ -51,8 +63,11 @@ export const AdminNavigator = () => {
       />
       <Admin.Screen
         name="Admin Products"
-        component={ProductsScreen}
-        options={({ navigation }) => generateOptions("Products", "layers")}
+        component={ProductsNavigator}
+        options={({ navigation }) => ({
+          ...generateOptions("Products", "layers"),
+          headerShown: false,
+        })}
       />
     </Admin.Navigator>
   );

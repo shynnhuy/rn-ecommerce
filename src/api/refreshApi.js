@@ -1,18 +1,12 @@
 import axios from "axios";
 
-const axiosServiceRefresh = axios.create({
+const baseURL = "http://192.168.1.113:5000/api/v1";
+export const axiosServiceRefresh = axios.create({
+  baseURL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
 });
-export const handleRefresh = async (refreshToken) => {
-  return new Promise((resolve, reject) => {
-    axiosServiceRefresh
-      .post("/auth/refresh", { refreshToken })
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => reject(error));
-  });
-};
+export const handleRefresh = (refreshToken) =>
+  axiosServiceRefresh.post("/auth/refresh", { refreshToken });

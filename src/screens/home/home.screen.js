@@ -29,7 +29,7 @@ export const HomeScreen = ({ navigation }) => {
   const shop = useSelector((state) => state.shop);
   const count = useSelector(selectCartCount);
 
-  const { data, isLoading } = useQuery("categories", fetchCategories);
+  const { data, isLoading, error } = useQuery("categories", fetchCategories);
 
   const [filter, openFilter, closeFilter] = useModal();
 
@@ -81,7 +81,13 @@ export const HomeScreen = ({ navigation }) => {
       </View>
       <Filter open={filter} onClose={closeFilter} />
 
-      {!isLoading && <Categories categories={data?.result} />}
+      {!isLoading ? (
+        error ? null : (
+          <Categories categories={data?.result} />
+        )
+      ) : (
+        <Loading />
+      )}
 
       <FlatList
         columnWrapperStyle={{ justifyContent: "space-between" }}

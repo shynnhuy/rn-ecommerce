@@ -7,19 +7,24 @@ import { Loading } from "~app/components";
 import { useModal } from "~app/hooks";
 import { ProductForm } from "./components/ProductForm";
 
-const fetchProducts = () => api.get("/manager/products");
+const fetchProducts = async () => {
+  const { result } = await api.get("/manager/products");
+  return result;
+};
+
 export const ProductsScreen = ({ navigation }) => {
-  const { data, error, isLoading } = useQuery(
+  const { data, isError, error, isLoading } = useQuery(
     ["manager/products"],
     fetchProducts
   );
 
-  const [modal, openModal, closeModal] = useModal();
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button variant="ghost" onPress={openModal}>
+        <Button
+          variant="ghost"
+          onPress={() => navigation.navigate("Admin Product")}
+        >
           <Text>Create</Text>
         </Button>
       ),
@@ -30,8 +35,8 @@ export const ProductsScreen = ({ navigation }) => {
     return <Loading />;
   }
 
-  if (error) {
-    return <Text>{error?.message}</Text>;
+  if (isError) {
+    return <Text>{error.message}</Text>;
   }
 
   const renderItem = ({ item: product }) => (
@@ -53,14 +58,17 @@ export const ProductsScreen = ({ navigation }) => {
     </>
   );
 
+  const chooseImage = () => {
+    navigation.navigate("Images");
+  };
+
   return (
     <View>
       <FlatList
-        data={data.result}
+        data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
       />
-      <ProductForm open={modal} onClose={closeModal} />
     </View>
   );
 };

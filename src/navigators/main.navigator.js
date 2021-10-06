@@ -9,6 +9,7 @@ import { AdminNavigator } from "./admin.navigator";
 
 import { MapScreen, DetailsScreen } from "~app/screens/home";
 import { SearchScreen } from "~app/screens/home/search.screen";
+import { ImagesScreen } from "~app/screens/admin";
 
 const Main = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -83,6 +84,7 @@ export const MainNavigator = () => {
       />
       <Stack.Screen name="Address" component={MapScreen} />
       <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="Images" component={ImagesScreen} />
     </Stack.Navigator>
   );
 };
