@@ -1,7 +1,6 @@
 import { CheckIcon, FormControl, Select } from "native-base";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { View, Text } from "react-native";
 
 export const SelectField = ({
   name,
@@ -14,6 +13,7 @@ export const SelectField = ({
     <FormControl>
       <FormControl.Label>{label}</FormControl.Label>
       <Controller
+        name={name}
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <Select

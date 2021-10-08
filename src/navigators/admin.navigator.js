@@ -10,10 +10,13 @@ const {
   DashboardScreen,
   UsersScreen,
   ProductsScreen,
+  OrdersScreen,
+  OrderScreen,
 } = require("~app/screens/admin");
 
 const Admin = createBottomTabNavigator();
 const AdminProducts = createNativeStackNavigator();
+const AdminOrders = createNativeStackNavigator();
 
 const BackButton = ({ navigation }) => {
   return (
@@ -40,9 +43,28 @@ const generateOptions = (name, icon, navigation = null) => ({
 const ProductsNavigator = () => {
   return (
     <AdminProducts.Navigator>
-      <AdminProducts.Screen name="List Products" component={ProductsScreen} />
-      <AdminProducts.Screen name="Admin Product" component={ProductScreen} />
+      <AdminProducts.Screen
+        name="Admin List Products"
+        component={ProductsScreen}
+      />
+      <AdminProducts.Screen
+        name="Admin Create Product"
+        component={ProductScreen}
+      />
     </AdminProducts.Navigator>
+  );
+};
+
+const OrdersNavigator = () => {
+  return (
+    <AdminOrders.Navigator>
+      <AdminOrders.Screen name="Admin List Orders" component={OrdersScreen} />
+      <AdminOrders.Screen
+        name="Admin Order"
+        component={OrderScreen}
+        options={{ headerTitle: "Order Details" }}
+      />
+    </AdminOrders.Navigator>
   );
 };
 
@@ -55,6 +77,14 @@ export const AdminNavigator = () => {
         options={({ navigation }) =>
           generateOptions("Dashboard", "pie-chart", navigation)
         }
+      />
+      <Admin.Screen
+        name="Admin Orders"
+        component={OrdersNavigator}
+        options={({ navigation }) => ({
+          ...generateOptions("Orders", "documents"),
+          headerShown: false,
+        })}
       />
       <Admin.Screen
         name="Admin Users"

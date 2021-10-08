@@ -4,8 +4,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import { api } from "~app/api";
 import { Loading } from "~app/components";
-import { useModal } from "~app/hooks";
-import { ProductForm } from "./components/ProductForm";
 
 const fetchProducts = async () => {
   const { result } = await api.get("/manager/products");
@@ -23,7 +21,7 @@ export const ProductsScreen = ({ navigation }) => {
       headerRight: () => (
         <Button
           variant="ghost"
-          onPress={() => navigation.navigate("Admin Product")}
+          onPress={() => navigation.navigate("Admin Create Product")}
         >
           <Text>Create</Text>
         </Button>

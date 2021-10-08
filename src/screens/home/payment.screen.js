@@ -26,7 +26,7 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
     location: { address },
   } = useLocationContext();
 
-  const placeOrder = async (paid = false) => {
+  const placeOrder = async (paid = 0) => {
     if (!fullName || !address) {
       Alert.alert("Please fill all input.");
       return;

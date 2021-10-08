@@ -1,7 +1,8 @@
 import axios from "axios";
 import {
   getAccessToken,
-  isTokenExpired,
+  removeAccessToken,
+  removeRefreshToken,
   getRefreshToken,
   setAccessToken,
   setRefreshToken,
@@ -58,6 +59,15 @@ api.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
+      if (error.config.url === "/auth/refreshToken") {
+        await removeRefreshToken();
+        await removeAccessToken();
+        console.log("REFRESH ERROR");
+        return new Promise((resolve, reject) => {
+          reject(error);
+        });
+      }
       try {
         const refreshToken = await getRefreshToken();
         // console.log(refreshToken);

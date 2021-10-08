@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import { IconButton, Image, Icon } from "native-base";
+import { IconButton, Image, Icon, Box } from "native-base";
 import React from "react";
 import {
   Dimensions,
@@ -21,7 +21,7 @@ export const Card = ({ product, addToCart }) => {
       activeOpacity={0.8}
       onPress={() => navigate("Details", { _id: product._id })}
     >
-      <View style={styles.card}>
+      <Box shadow="3" rounded="5" style={styles.card}>
         {/* <View style={{ alignItems: "flex-end" }}>
           <View
             style={{
@@ -45,9 +45,12 @@ export const Card = ({ product, addToCart }) => {
 
         <View
           style={{
-            height: 100,
+            height: 120,
             alignItems: "center",
             justifyContent: "center",
+            backgroundColor: "#fff",
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
           }}
         >
           <Image
@@ -60,11 +63,13 @@ export const Card = ({ product, addToCart }) => {
         </View>
 
         <Text
+          numberOfLines={1}
           style={{
             fontWeight: "bold",
             fontSize: 17,
             marginTop: 15,
             marginHorizontal: 5,
+            padding: 5,
           }}
         >
           {product.name}
@@ -107,7 +112,7 @@ export const Card = ({ product, addToCart }) => {
             </Text>
           </View> */}
         </View>
-      </View>
+      </Box>
     </TouchableOpacity>
   );
 };
@@ -120,6 +125,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     borderRadius: 10,
     marginBottom: 20,
-    padding: 5,
   },
 });
