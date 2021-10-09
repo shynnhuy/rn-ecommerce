@@ -7,8 +7,9 @@ import {
   SEARCH_PRODUCT,
 } from "./shop.constants";
 
-export const actionFetchProducts = () => ({
+export const actionFetchProducts = (cb) => ({
   type: FETCH_PRODUCTS.PENDING,
+  cb,
 });
 export const actionFetchProductsSuccess = (payload) => ({
   type: FETCH_PRODUCTS.SUCCESS,

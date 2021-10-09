@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   View,
   Image,
   Pressable,
+  RefreshControl,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
@@ -16,9 +17,9 @@ import {
   actionFetchOrders,
   authSelector,
   isAdminSelector,
-  userSelector,
 } from "~app/redux/auth";
 import { MyOrders } from "./components/MyOrders";
+import { ScrollView } from "native-base";
 
 const UserBox = ({ user, onPress }) => (
   <Pressable
@@ -46,9 +47,16 @@ export const AccountScreen = ({ navigation: { navigate } }) => {
   const isAdmin = useSelector(isAdminSelector);
   const dispatch = useDispatch();
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     dispatch(actionFetchOrders());
   }, []);
+
+  const onReresh = () => {
+    setRefreshing(true);
+    dispatch(actionFetchOrders(() => setRefreshing(false)));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,12 +76,17 @@ export const AccountScreen = ({ navigation: { navigate } }) => {
           <Ionicons name="cog-outline" size={28} color="gray" />
         </TouchableOpacity>
       </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onReresh} />
+        }
+      >
+        {Boolean(auth.user) && (
+          <UserBox user={auth.user} onPress={() => navigate("Profile")} />
+        )}
 
-      {Boolean(auth.user) && (
-        <UserBox user={auth.user} onPress={() => navigate("Profile")} />
-      )}
-
-      <MyOrders loading={auth.loading} orders={auth.orders} />
+        <MyOrders loading={auth.loading} orders={auth.orders} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

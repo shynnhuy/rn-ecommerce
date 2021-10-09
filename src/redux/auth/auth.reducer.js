@@ -7,6 +7,7 @@ import {
   SEND_REQUEST,
   UPDATE_AVATAR,
   UPDATE_INFO,
+  UPDATE_PUSH_TOKEN,
 } from "./auth.constants";
 
 const initialState = {
@@ -79,6 +80,18 @@ export const authReducer = (state = initialState, { type, payload, error }) => {
         error: null,
       };
     case FETCH_ORDERS.ERROR:
+      return { ...state, loading: false, error };
+
+    case UPDATE_PUSH_TOKEN.SUCCESS: {
+      console.log("SUCCESS PUSH")
+      return {
+        ...state,
+        loading: false,
+        user: { ...state.user, pushToken: payload },
+        error: null,
+      };
+    }
+    case UPDATE_PUSH_TOKEN.ERROR:
       return { ...state, loading: false, error };
 
     default:

@@ -1,15 +1,18 @@
-import {call, fork, takeLatest, put} from "@redux-saga/core/effects";
+import { call, fork, takeLatest, put } from "@redux-saga/core/effects";
 import {
   actionFetchProductsError,
   actionFetchProductsSuccess,
 } from "./shop.actions";
-import {FETCH_PRODUCTS} from "./shop.constants";
-import {apiGetProducts} from "./shop.services";
+import { FETCH_PRODUCTS } from "./shop.constants";
+import { apiGetProducts } from "./shop.services";
 
-function* fetchProducts() {
+function* fetchProducts({ cb }) {
   try {
     const data = yield call(apiGetProducts);
     yield put(actionFetchProductsSuccess(data.result));
+    if (cb) {
+      cb();
+    }
   } catch (error) {
     yield put(actionFetchProductsError(error.message));
   }

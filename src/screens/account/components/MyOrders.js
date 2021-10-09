@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/core";
 
 const OrderItem = ({ count, title, icon }) => {
   const { navigate } = useNavigation();
+  console.log(title, ": ", count);
   return (
     <TouchableOpacity
       style={styles.box}
@@ -39,7 +40,10 @@ const OrderItem = ({ count, title, icon }) => {
 
 export const MyOrders = ({ loading, orders = [] }) => {
   const counting = (status) => {
-    return orders.reduce((acc, cur) => cur.status === status && acc + 1, 0);
+    return orders.reduce(
+      (acc, cur) => (cur.status === status ? acc + 1 : acc),
+      0
+    );
   };
 
   if (loading) {

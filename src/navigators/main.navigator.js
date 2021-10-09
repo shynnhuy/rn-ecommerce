@@ -10,6 +10,10 @@ import { AdminNavigator } from "./admin.navigator";
 import { MapScreen, DetailsScreen } from "~app/screens/home";
 import { SearchScreen } from "~app/screens/home/search.screen";
 import { ImagesScreen } from "~app/screens/admin";
+import { registerForPushNotificationsAsync } from "~app/utils";
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
+import { actionSavePushToken } from "~app/redux/auth";
 
 const Main = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -65,6 +69,20 @@ const MainNav = () => {
 };
 
 export const MainNavigator = () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    const requestNotification = async () => {
+      try {
+        const token = await registerForPushNotificationsAsync();
+        // Alert.alert("Success", `Token: ${token}`);
+        dispatch(actionSavePushToken(token));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    requestNotification();
+    // return () => {};
+  }, []);
   return (
     <Stack.Navigator>
       <Stack.Screen

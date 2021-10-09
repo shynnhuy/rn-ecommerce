@@ -15,7 +15,7 @@ const api = axios.create({
   baseURL,
 });
 
-let refreshTokenRequest = null;
+// let refreshTokenRequest = null;
 api.interceptors.request.use(
   async (config) => {
     const token = await getAccessToken();

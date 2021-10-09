@@ -14,3 +14,9 @@ export const setRefreshToken = (refreshToken) =>
 export const getRefreshToken = () => AsyncStorage.getItem(REFRESH_TOKEN_KEY);
 export const removeRefreshToken = () =>
   AsyncStorage.removeItem(REFRESH_TOKEN_KEY);
+
+const NOTIFY_TOKEN_KEY = "@PUSH_NOTIFICATION";
+export const setNotificationToken = (token) =>
+  AsyncStorage.setItem(NOTIFY_TOKEN_KEY, token);
+export const removeNotificationToken = () =>
+  AsyncStorage.removeItem(NOTIFY_TOKEN_KEY);

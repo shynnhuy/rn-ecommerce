@@ -1,8 +1,11 @@
 import {
+  Alert,
   Avatar,
   Button,
+  CloseIcon,
   FlatList,
   Heading,
+  HStack,
   Text,
   View,
   VStack,
@@ -11,6 +14,25 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { useMutation } from "react-query";
 import { queries } from "~app/api";
+
+const StatusAlert = ({ status, title }) => (
+  <Alert w="100%" status={status}>
+    <VStack space={2} flexShrink={1} w="100%">
+      <HStack flexShrink={1} space={2} justifyContent="space-between">
+        <HStack space={2} flexShrink={1}>
+          <Alert.Icon mt="1" />
+          <Text fontSize="md" color="coolGray.800">
+            {title}
+          </Text>
+        </HStack>
+        <IconButton
+          variant="unstyled"
+          icon={<CloseIcon size="3" color="coolGray.600" />}
+        />
+      </HStack>
+    </VStack>
+  </Alert>
+);
 
 export const OrderScreen = ({ route }) => {
   const { order } = route.params;
@@ -56,6 +78,10 @@ export const OrderScreen = ({ route }) => {
           <Text>{order._id}</Text>
         </View>
         <View>
+          <Heading size="xs">Order status:</Heading>
+          <Text>{order.status}</Text>
+        </View>
+        <View>
           <Heading size="xs">Shipping Address:</Heading>
           <Text>{order.address}</Text>
         </View>
@@ -75,30 +101,38 @@ export const OrderScreen = ({ route }) => {
           />
         </View>
       </VStack>
-      {mutation.isError ? (
-        <Text>An error occurred: {mutation.error.message}</Text>
-      ) : null}
+      <View>
+        {mutation.isError && (
+          <StatusAlert status="error" title={mutation.error.message} />
+        )}
 
-      {mutation.isSuccess ? <Text>Order's status changed!</Text> : null}
-      <Button.Group>
-        <Button
-          flex={1}
-          variant="outline"
-          colorScheme="red"
-          onPress={() =>
-            mutation.mutate({ _id: order._id, status: "shipping" })
-          }
-        >
-          Ship
-        </Button>
-        <Button
-          flex={1}
-          colorScheme="green"
-          onPress={() => mutation.mutate({ _id: order._id, status: "finish" })}
-        >
-          Finish
-        </Button>
-      </Button.Group>
+        {mutation.isSuccess && (
+          <StatusAlert status="error" title={"Order's status changed!"} />
+        )}
+      </View>
+      <VStack space={2}>
+        <Button.Group>
+          <Button
+            flex={1}
+            variant="outline"
+            colorScheme="red"
+            onPress={() =>
+              mutation.mutate({ _id: order._id, status: "finish" })
+            }
+          >
+            Revoke
+          </Button>
+          <Button
+            flex={1}
+            colorScheme="green"
+            onPress={() => {
+              mutation.mutate({ _id: order._id, status: "shipping" });
+            }}
+          >
+            Ship
+          </Button>
+        </Button.Group>
+      </VStack>
     </View>
   );
 };

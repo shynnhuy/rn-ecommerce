@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -28,6 +28,7 @@ export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const shop = useSelector((state) => state.shop);
   const count = useSelector(selectCartCount);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { data, isLoading, error } = useQuery("categories", fetchCategories);
 
@@ -44,6 +45,11 @@ export const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     dispatch(actionFetchProducts());
   }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(actionFetchProducts(() => setRefreshing(false)));
+  };
 
   const renderItem = ({ item }) => (
     <Card
@@ -101,6 +107,9 @@ export const HomeScreen = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(product) => product._id}
         ListEmptyComponent={<ListEmpty />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

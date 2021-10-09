@@ -20,6 +20,8 @@ import {
   actionUpdateInfoSuccess,
   actionFetchOrdersError,
   actionFetchOrdersSuccess,
+  actionSavePushTokenError,
+  actionSavePushTokenSuccess,
 } from "./auth.actions";
 import {
   FETCH_ORDERS,
@@ -28,6 +30,7 @@ import {
   REGISTER,
   UPDATE_AVATAR,
   UPDATE_INFO,
+  UPDATE_PUSH_TOKEN,
 } from "./auth.constants";
 import {
   apiLogin,
@@ -35,6 +38,7 @@ import {
   apiUpdateAvatar,
   apiUpdateInfo,
   apiFetchMyOrders,
+  apiSavePushToken,
 } from "./auth.services";
 
 function* login(payload) {
@@ -96,14 +100,29 @@ function* uploadAvatar({ payload }) {
     yield put(actionUpdateAvatarError(error.message));
   }
 }
-function* fetchOrders() {
+function* fetchOrders({ cb }) {
   try {
     yield put(sendRequest());
     const data = yield call(apiFetchMyOrders);
     // console.log(data);
     yield put(actionFetchOrdersSuccess(data.result));
+    if (cb) {
+      cb();
+    }
   } catch (error) {
     yield put(actionFetchOrdersError(error.result));
+  }
+}
+
+function* savePushToken(payload) {
+  try {
+    console.log("SAGA PUSH TOKEN: ", payload);
+    yield put(sendRequest());
+    const data = yield call(apiSavePushToken, payload);
+    console.log(data);
+    yield put(actionSavePushTokenSuccess(payload));
+  } catch (error) {
+    yield put(actionSavePushTokenError(error));
   }
 }
 
@@ -151,6 +170,13 @@ function* fetchMyOrders() {
   yield takeLatest(FETCH_ORDERS.PENDING, fetchOrders);
 }
 
+function* savePushTokenFlow() {
+  while (true) {
+    const { payload } = yield take(UPDATE_PUSH_TOKEN.PENDING);
+    yield fork(savePushToken, payload);
+  }
+}
+
 export function* authSaga() {
   yield fork(loginFlow);
   yield fork(registerFlow);
@@ -158,4 +184,5 @@ export function* authSaga() {
   yield fork(updateInfoFlow);
   yield fork(updateAvatarFlow);
   yield fork(fetchMyOrders);
+  yield fork(savePushTokenFlow);
 }

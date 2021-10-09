@@ -23,3 +23,6 @@ export const apiUpdateAvatar = (data) =>
   api.patch("/auth/avatar", createFormData(data));
 
 export const apiFetchMyOrders = () => api.get("/order/user");
+
+export const apiSavePushToken = (token) =>
+  api.patch("/auth/pushToken", { token });

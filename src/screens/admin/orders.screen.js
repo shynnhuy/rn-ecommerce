@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, FlatList, Text, View } from "native-base";
-import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { RefreshControl, StyleSheet, TouchableOpacity } from "react-native";
 import { useQuery } from "react-query";
 import { queries } from "~app/api";
 import { Loading } from "~app/components";
@@ -8,10 +8,21 @@ import { Loading } from "~app/components";
 const count = (products) => products.reduce((acc, cur) => acc + cur.amount, 0);
 
 export const OrdersScreen = ({ navigation }) => {
-  const { data, isError, isLoading, error } = useQuery(
+  const [refreshing, setRefreshing] = useState(false);
+  const { data, isError, isLoading, error, refetch } = useQuery(
     ["manager/orders"],
-    queries.getAllOrders
+    queries.getAllOrders,
+    {
+      onSuccess: () => {
+        setRefreshing(false);
+      },
+    }
   );
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+  };
 
   const renderItem = ({ item: order }) => (
     <>
@@ -60,6 +71,9 @@ export const OrdersScreen = ({ navigation }) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

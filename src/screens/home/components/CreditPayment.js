@@ -35,7 +35,7 @@ export const CreditPayment = ({ email, total, submit }) => {
         toast.show("Error");
         console.log(error);
       } else if (Boolean(paymentIntent)) {
-        submit(true);
+        submit(1);
         toast.show({
           title: "Payment successfully",
           description: `Successfully paid $${total}`,

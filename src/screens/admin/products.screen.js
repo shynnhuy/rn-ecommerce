@@ -1,6 +1,12 @@
+import React, { useState } from "react";
 import { Avatar, Divider, FlatList, Button } from "native-base";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useQuery } from "react-query";
 import { api } from "~app/api";
 import { Loading } from "~app/components";
@@ -11,9 +17,15 @@ const fetchProducts = async () => {
 };
 
 export const ProductsScreen = ({ navigation }) => {
-  const { data, isError, error, isLoading } = useQuery(
+  const [refreshing, setRefreshing] = useState(false);
+  const { data, isError, error, isLoading, refetch } = useQuery(
     ["manager/products"],
-    fetchProducts
+    fetchProducts,
+    {
+      onSuccess: () => {
+        setRefreshing(false);
+      },
+    }
   );
 
   React.useLayoutEffect(() => {
@@ -28,6 +40,11 @@ export const ProductsScreen = ({ navigation }) => {
       ),
     });
   }, [navigation]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -66,6 +83,9 @@ export const ProductsScreen = ({ navigation }) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

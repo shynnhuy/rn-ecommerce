@@ -1,6 +1,6 @@
 import React from "react";
 import Toast from "react-native-toast-notifications";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { Provider } from "./Provider";
 import RootNavigator from "./navigators/root.navigator";
 

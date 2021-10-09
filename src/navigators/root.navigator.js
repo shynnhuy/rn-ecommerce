@@ -1,8 +1,10 @@
 import React from "react";
-import {useSelector} from "react-redux";
-import {tokenSelector} from "../redux/auth";
-import {AuthNavigator} from "./auth.navigator";
-import {MainNavigator} from "./main.navigator";
+import { Alert } from "react-native";
+import { useSelector } from "react-redux";
+import { registerForPushNotificationsAsync } from "~app/utils";
+import { tokenSelector } from "~redux/auth";
+import { AuthNavigator } from "./auth.navigator";
+import { MainNavigator } from "./main.navigator";
 
 const RootNavigator = () => {
   const token = useSelector(tokenSelector);
