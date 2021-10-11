@@ -8,12 +8,11 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
-import { actionFetchOrders, authSelector } from "~app/redux/auth";
 import { useNavigation } from "@react-navigation/core";
 
 const OrderItem = ({ count, title, icon }) => {
   const { navigate } = useNavigation();
-  console.log(title, ": ", count);
+  // console.log(title, ": ", count);
   return (
     <TouchableOpacity
       style={styles.box}

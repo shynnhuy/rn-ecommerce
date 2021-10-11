@@ -1,5 +1,6 @@
 import {
   CLEAR_ERROR,
+  ERROR,
   FETCH_ORDERS,
   LOGIN,
   LOGOUT,
@@ -22,6 +23,8 @@ export const authReducer = (state = initialState, { type, payload, error }) => {
   switch (type) {
     case SEND_REQUEST:
       return { ...state, loading: true };
+    case ERROR:
+      return { ...state, loading: false, error };
     case CLEAR_ERROR:
       return { ...state, loading: false, error: null };
 
@@ -82,15 +85,14 @@ export const authReducer = (state = initialState, { type, payload, error }) => {
     case FETCH_ORDERS.ERROR:
       return { ...state, loading: false, error };
 
-    case UPDATE_PUSH_TOKEN.SUCCESS: {
-      console.log("SUCCESS PUSH")
+    case UPDATE_PUSH_TOKEN.SUCCESS:
       return {
         ...state,
         loading: false,
         user: { ...state.user, pushToken: payload },
         error: null,
       };
-    }
+
     case UPDATE_PUSH_TOKEN.ERROR:
       return { ...state, loading: false, error };
 

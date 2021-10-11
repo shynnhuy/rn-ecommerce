@@ -1,26 +1,21 @@
 import { put, fork, take, call, takeLatest } from "redux-saga/effects";
 import {
   getAccessToken,
+  getRefreshToken,
   removeAccessToken,
   setAccessToken,
   setRefreshToken,
 } from "../../utils";
 import {
-  actionLoginError,
   actionLoginSuccess,
   actionRegisterSuccess,
-  actionRegisterError,
   actionLogoutSuccess,
-  actionLogoutError,
   sendRequest,
+  sendError,
   actionLogout,
-  actionUpdateAvatarError,
   actionUpdateAvatarSuccess,
-  actionUpdateInfoError,
   actionUpdateInfoSuccess,
-  actionFetchOrdersError,
   actionFetchOrdersSuccess,
-  actionSavePushTokenError,
   actionSavePushTokenSuccess,
 } from "./auth.actions";
 import {
@@ -45,12 +40,12 @@ function* login(payload) {
   try {
     yield put(sendRequest());
     const data = yield call(apiLogin, payload);
-    // console.log(data);
+    // console.log(data.result);
     yield call(setAccessToken, data.result.accessToken);
     yield call(setRefreshToken, data.result.refreshToken);
     yield put(actionLoginSuccess(data.result));
   } catch (error) {
-    yield put(actionLoginError(error.message));
+    yield put(sendError(error.message));
     yield put(actionLogout());
   }
 }
@@ -61,7 +56,7 @@ function* logout() {
     yield call(removeAccessToken);
     yield put(actionLogoutSuccess());
   } catch (error) {
-    yield put(actionLogoutError());
+    yield put(sendError());
   }
 }
 
@@ -73,7 +68,7 @@ function* register(payload) {
     yield call(setRefreshToken, data.result.refreshToken);
     yield put(actionRegisterSuccess(data.result));
   } catch (error) {
-    yield put(actionRegisterError(error.message));
+    yield put(sendError(error.message));
   }
 }
 
@@ -84,7 +79,7 @@ function* updateInfo(payload) {
     yield put(actionUpdateInfoSuccess(data.result));
     toast.show(data.message, { type: "success" });
   } catch (error) {
-    yield put(actionUpdateInfoError(error.message));
+    yield put(sendError(error.message));
     toast.show(error.message, { type: "danger" });
   }
 }
@@ -97,7 +92,7 @@ function* uploadAvatar({ payload }) {
     yield put(actionUpdateAvatarSuccess(data.result));
     toast.show(data.message, { type: "success" });
   } catch (error) {
-    yield put(actionUpdateAvatarError(error.message));
+    yield put(sendError(error.message));
   }
 }
 function* fetchOrders({ cb }) {
@@ -110,7 +105,7 @@ function* fetchOrders({ cb }) {
       cb();
     }
   } catch (error) {
-    yield put(actionFetchOrdersError(error.result));
+    yield put(sendError(error.result));
   }
 }
 
@@ -118,11 +113,11 @@ function* savePushToken(payload) {
   try {
     console.log("SAGA PUSH TOKEN: ", payload);
     yield put(sendRequest());
-    const data = yield call(apiSavePushToken, payload);
-    console.log(data);
+    yield call(apiSavePushToken, payload);
+    // console.log(data);
     yield put(actionSavePushTokenSuccess(payload));
   } catch (error) {
-    yield put(actionSavePushTokenError(error));
+    yield put(sendError(error));
   }
 }
 

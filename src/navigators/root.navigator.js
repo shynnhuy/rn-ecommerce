@@ -1,13 +1,22 @@
-import React from "react";
-import { Alert } from "react-native";
-import { useSelector } from "react-redux";
-import { registerForPushNotificationsAsync } from "~app/utils";
-import { tokenSelector } from "~redux/auth";
+import React, { useLayoutEffect, useState } from "react";
+import { getAccessToken } from "~app/utils";
 import { AuthNavigator } from "./auth.navigator";
 import { MainNavigator } from "./main.navigator";
 
 const RootNavigator = () => {
-  const token = useSelector(tokenSelector);
+  const [token, setToken] = useState(null);
+  useLayoutEffect(() => {
+    const getToken = async () => {
+      try {
+        const storageToken = await getAccessToken();
+        setToken(storageToken);
+      } catch (error) {
+        console.log(error);
+        setToken(null);
+      }
+    };
+    getToken();
+  });
   return Boolean(token) ? <MainNavigator /> : <AuthNavigator />;
 };
 

@@ -1,5 +1,6 @@
 import {
   CLEAR_ERROR,
+  ERROR,
   FETCH_ORDERS,
   LOGIN,
   LOGOUT,
@@ -12,6 +13,10 @@ import {
 
 export const sendRequest = () => ({
   type: SEND_REQUEST,
+});
+export const sendError = (error) => ({
+  type: ERROR,
+  error,
 });
 export const clearError = () => ({
   type: CLEAR_ERROR,

@@ -14,6 +14,7 @@ import { registerForPushNotificationsAsync } from "~app/utils";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import { actionSavePushToken } from "~app/redux/auth";
+import { OrderDetail } from "~app/screens/account";
 
 const Main = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -103,6 +104,7 @@ export const MainNavigator = () => {
       <Stack.Screen name="Address" component={MapScreen} />
       <Stack.Screen name="Details" component={DetailsScreen} />
       <Stack.Screen name="Images" component={ImagesScreen} />
+      <Stack.Screen name="View Order" component={OrderDetail} />
     </Stack.Navigator>
   );
 };

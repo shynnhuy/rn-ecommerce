@@ -6,6 +6,7 @@ import {
   SettingScreen,
 } from "../screens/account";
 import { OrderScreen } from "~app/screens/account/order.screen";
+import { OrderDetail } from "~app/screens/account/order-detail.screen";
 
 const Account = createNativeStackNavigator();
 const Order = createNativeStackNavigator();
@@ -17,8 +18,15 @@ const OrderNavigator = () => {
         headerShown: false,
       }}
     >
-      <Order.Screen name="Account" component={AccountScreen} />
+      <Order.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Order.Screen name="Order" component={OrderScreen} />
+      {/* <Order.Screen name="View Order" component={OrderDetail} /> */}
     </Order.Navigator>
   );
 };

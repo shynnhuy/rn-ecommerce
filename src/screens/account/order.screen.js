@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Box, FlatList, HStack, VStack, Text } from "native-base";
+import { Box, FlatList, HStack, VStack, Text, Pressable } from "native-base";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -18,7 +18,13 @@ export const OrderScreen = ({ navigation, route }) => {
   const renderItem = ({ item }) => {
     const count = item.products?.reduce((acc, cur) => acc + cur.amount, 0);
     return (
-      <Box borderBottomWidth="1" pl="4" pr="5" py="2">
+      <Pressable
+        onPress={() => navigation.navigate("View Order", { _id: item._id })}
+        borderBottomWidth="1"
+        pl="4"
+        pr="5"
+        py="2"
+      >
         <HStack space={3} justifyContent="space-between">
           <VStack>
             <Text
@@ -49,7 +55,7 @@ export const OrderScreen = ({ navigation, route }) => {
           </VStack>
           <Text>{item.status}</Text>
         </HStack>
-      </Box>
+      </Pressable>
     );
   };
 

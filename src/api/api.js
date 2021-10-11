@@ -9,7 +9,7 @@ import {
 } from "../utils";
 import { handleRefresh } from "./refreshApi";
 
-const baseURL = "http://192.168.1.113:5000/api/v1";
+const baseURL = "http://192.168.1.94:5000/api/v1";
 
 const api = axios.create({
   baseURL,
@@ -55,44 +55,43 @@ api.interceptors.response.use(
   (response) => response.data,
   async (error) => {
     const originalRequest = error.config;
+    const {
+      config,
+      response: { status },
+    } = error;
     // console.log(error.response);
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      if (error.config.url === "/auth/refreshToken") {
-        await removeRefreshToken();
-        await removeAccessToken();
-        console.log("REFRESH ERROR");
-        return new Promise((resolve, reject) => {
-          reject(error);
-        });
-      }
-      try {
-        const refreshToken = await getRefreshToken();
-        // console.log(refreshToken);
-        const { data } = await handleRefresh(refreshToken);
-
-        await setAccessToken(data.result?.accessToken);
-        await setRefreshToken(data.result?.refreshToken);
-
-        originalRequest.headers[
-          "Authorization"
-        ] = `Bearer ${data.result?.accessToken}`;
-
-        // return axios(originalRequest);
-
-        return new Promise((resolve, reject) =>
-          api(originalRequest)
-            .then((res) => resolve(res.data))
-            .catch((err) => reject(err.response.data))
-        );
-      } catch (error) {
-        // console.log(error);
-        return Promise.reject(error.response.data);
-      }
+    if (status !== 401) {
+      return Promise.reject(error);
     }
-    return Promise.reject(error.response.data);
+
+    // if (error.response.status === 401 && !originalRequest._retry) {
+    //   originalRequest._retry = true;
+
+    try {
+      const refreshToken = await getRefreshToken();
+      // console.log(refreshToken);
+      const { data } = await handleRefresh(refreshToken);
+
+      await setAccessToken(data.result?.accessToken);
+      await setRefreshToken(data.result?.refreshToken);
+
+      originalRequest.headers[
+        "Authorization"
+      ] = `Bearer ${data.result?.accessToken}`;
+
+      // return axios(originalRequest);
+
+      return new Promise((resolve, reject) =>
+        api(originalRequest)
+          .then((res) => resolve(res.data))
+          .catch((err) => reject(err.response.data))
+      );
+    } catch (error) {
+      // console.log(error);
+      return Promise.reject(error.response.data);
+    }
+    // return Promise.reject(error.response.data);
   }
 );
 

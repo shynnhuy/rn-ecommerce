@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { Button, Input, Icon, FormControl, Radio, useToast } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { CreditPayment } from "./components/CreditPayment";
 
 import { useLocationContext } from "~app/context";
 
 import { userSelector } from "~app/redux/auth";
-import { selectCart, selectCartTotal } from "~app/redux/shop";
+import { actionEmptyCart, selectCart, selectCartTotal } from "~app/redux/shop";
 
 import { api } from "~app/api";
 
@@ -19,6 +19,7 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
   const total = useSelector(selectCartTotal);
   const [fullName, setFullName] = useState("");
   const [paymentMethod, setPaymentMethod] = useState(0);
+  const dispatch = useDispatch();
 
   const toast = useToast();
 
@@ -47,6 +48,7 @@ export const PaymentScreen = ({ navigation: { navigate } }) => {
         paid,
       });
 
+      dispatch(actionEmptyCart());
       toast.show({
         title: "Order success",
         description: data.message,

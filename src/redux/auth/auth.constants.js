@@ -1,6 +1,7 @@
 import { createActionSet } from "../../utils";
 
 export const SEND_REQUEST = "auth/SEND_REQUEST";
+export const ERROR = "auth/ERROR";
 export const CLEAR_ERROR = "auth/CLEAR_ERROR";
 
 export const LOGIN = createActionSet("auth/LOGIN");
