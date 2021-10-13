@@ -13,7 +13,7 @@ import { LocationProvider } from "./context/location.context";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "./api";
 
-const { store, persistor } = configureStore();
+export const { store, persistor } = configureStore();
 
 export const Provider = ({ children }) => {
   return (

@@ -3,6 +3,7 @@ import {
   getAccessToken,
   getRefreshToken,
   removeAccessToken,
+  removeRefreshToken,
   setAccessToken,
   setRefreshToken,
 } from "../../utils";
@@ -54,6 +55,7 @@ function* logout() {
   try {
     yield put(sendRequest());
     yield call(removeAccessToken);
+    yield call(removeRefreshToken);
     yield put(actionLogoutSuccess());
   } catch (error) {
     yield put(sendError());

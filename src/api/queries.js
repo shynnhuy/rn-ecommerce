@@ -9,6 +9,14 @@ export const queries = {
     const { result } = await api.post("/products", newProduct);
     return result;
   },
+  fetchProductRatingById: async (id) => {
+    const { result } = await api.get(`/products/${id}/rating`);
+    return result;
+  },
+  ratingProduct: async (product, value) => {
+    const { result } = await api.post("/products/rating", { product, value });
+    return result;
+  },
 
   getOrder: async (id) => {
     const { result } = await api.get(`/order/${id}`);

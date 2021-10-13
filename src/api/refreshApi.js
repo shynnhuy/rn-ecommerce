@@ -1,7 +1,9 @@
 import axios from "axios";
+import { actionLogout } from "~app/redux/auth";
 import { removeAccessToken, removeRefreshToken } from "~app/utils";
+import { store } from "../Provider";
 
-const baseURL = "http://192.168.1.94:5000/api/v1";
+const baseURL = "http://192.168.1.113:5000/api/v1";
 export const axiosServiceRefresh = axios.create({
   baseURL,
   headers: {
@@ -18,6 +20,7 @@ axiosServiceRefresh.interceptors.response.use(
       await removeRefreshToken();
       await removeAccessToken();
       console.log("REFRESH ERROR");
+      store.dispatch(actionLogout());
       return new Promise.reject(error);
     }
   }

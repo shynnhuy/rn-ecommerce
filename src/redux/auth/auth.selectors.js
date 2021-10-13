@@ -6,7 +6,7 @@ export const userSelector = (state) => state.auth.user;
 
 export const isAdminSelector = createSelector(
   userSelector,
-  (user) => user.role === "Admin"
+  (user) => user?.role === "Admin"
 );
 
 export const selectOrderByStatus = createSelector(

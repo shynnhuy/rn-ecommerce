@@ -1,22 +1,12 @@
-import React, { useLayoutEffect, useState } from "react";
-import { getAccessToken } from "~app/utils";
+import React from "react";
+import { useSelector } from "react-redux";
+import { tokenSelector } from "~app/redux/auth";
 import { AuthNavigator } from "./auth.navigator";
 import { MainNavigator } from "./main.navigator";
 
 const RootNavigator = () => {
-  const [token, setToken] = useState(null);
-  useLayoutEffect(() => {
-    const getToken = async () => {
-      try {
-        const storageToken = await getAccessToken();
-        setToken(storageToken);
-      } catch (error) {
-        console.log(error);
-        setToken(null);
-      }
-    };
-    getToken();
-  });
+  const token = useSelector(tokenSelector);
+
   return Boolean(token) ? <MainNavigator /> : <AuthNavigator />;
 };
 

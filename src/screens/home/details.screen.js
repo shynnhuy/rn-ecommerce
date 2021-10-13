@@ -6,15 +6,17 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { SliderBox } from "react-native-image-slider-box";
 
-import { api } from "~app/api";
+import { api, queries } from "~app/api";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch } from "react-redux";
 import { actionAddToCart } from "~app/redux/shop";
 import { financial } from "~app/utils";
+import { AirbnbRating, Rating } from "react-native-ratings";
 
 const fetchProductById = async (id) => {
   // console.log(id);
@@ -29,6 +31,15 @@ export const DetailsScreen = ({ route }) => {
 
   const { data, isLoading, error } = useQuery(["product", _id], () =>
     fetchProductById(_id)
+  );
+
+  const { data: rating, isLoading: isLoadRating } = useQuery(
+    ["product-rate", _id],
+    () => queries.fetchProductRatingById(_id)
+  );
+
+  const { mutate } = useMutation(({ product, value }) =>
+    queries.ratingProduct(product, value)
   );
 
   if (isLoading || !data.result) {
@@ -168,18 +179,31 @@ export const DetailsScreen = ({ route }) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.buyBtn} onPress={addToCart}>
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  fontWeight: "bold",
-                }}
-              >
-                Add to cart
-              </Text>
-            </TouchableOpacity>
+            {isLoadRating ? (
+              <ActivityIndicator />
+            ) : (
+              <AirbnbRating
+                defaultRating={rating || 0}
+                onFinishRating={(value) =>
+                  mutate({ product: product._id, value })
+                }
+                showRating={false}
+                size={25}
+              />
+            )}
           </View>
+
+          <TouchableOpacity style={styles.buyBtn} onPress={addToCart}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              Add to cart
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -218,7 +242,7 @@ const styles = StyleSheet.create({
   },
   borderBtnText: { fontWeight: "bold", fontSize: 28 },
   buyBtn: {
-    width: 130,
+    marginTop: 15,
     height: 50,
     backgroundColor: "green",
     justifyContent: "center",
