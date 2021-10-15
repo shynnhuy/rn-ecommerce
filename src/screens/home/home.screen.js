@@ -72,7 +72,8 @@ export const HomeScreen = ({ navigation }) => {
       <StatusBar style="dark" />
       <View style={{ marginVertical: 15, flexDirection: "row" }}>
         <SearchBar onSearch={onSearch} />
-        <IconButton
+        {/* <IconButton
+          disabled
           onPress={openFilter}
           variant="solid"
           bg="green.600"
@@ -83,7 +84,7 @@ export const HomeScreen = ({ navigation }) => {
           icon={
             <Icon as={MaterialIcons} name="sort" size={30} color={"#fff"} />
           }
-        />
+        /> */}
       </View>
       <Filter open={filter} onClose={closeFilter} />
 

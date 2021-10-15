@@ -47,6 +47,14 @@ export const NotificationScreen = ({ navigation }) => {
     </>
   );
 
+  const Empty = () => (
+    <View flex={1} alignItems="center">
+      <Text fontWeight="500" fontSize="20" color="coolGray.600">
+        You don't have any notification
+      </Text>
+    </View>
+  );
+
   if (isLoading) {
     return <Loading />;
   }
@@ -60,6 +68,7 @@ export const NotificationScreen = ({ navigation }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        ListEmptyComponent={<Empty />}
       />
     </View>
   );

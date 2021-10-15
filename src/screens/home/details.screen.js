@@ -89,10 +89,16 @@ export const DetailsScreen = ({ route }) => {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 22, fontWeight: "bold", flex: 1 }}>
             {product.name}
           </Text>
-          <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              flex: 1,
+              justifyContent: "flex-end",
+            }}
+          >
             <View
               style={[
                 styles.priceTag,

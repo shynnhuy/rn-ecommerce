@@ -14,7 +14,7 @@ export const SearchScreen = ({ navigation, route }) => {
   const { search } = route.params;
   const dispatch = useDispatch();
   const products = useSelector(selectFilteredProducts);
-  console.log(products);
+  // console.log(products);
 
   React.useEffect(() => {
     dispatch(actionFilterProducts(search));
