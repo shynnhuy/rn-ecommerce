@@ -3,7 +3,7 @@ import { actionLogout } from "~app/redux/auth";
 import { removeAccessToken, removeRefreshToken } from "~app/utils";
 import { store } from "../Provider";
 
-const baseURL = "http://192.168.1.113:5000/api/v1";
+const baseURL = "https://shynn-rn.herokuapp.com/api/v1";
 export const axiosServiceRefresh = axios.create({
   baseURL,
   headers: {
